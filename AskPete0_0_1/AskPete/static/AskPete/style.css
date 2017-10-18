@@ -28,14 +28,17 @@ li a:hover {
     background-color: #4CAF50;
 }
 
-body, html{
-    height: 100%;
+body{
+    height: auto;
+    background-color: crimson;
+    background: linear-gradient(crimson, black) no-repeat;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Caveat Brush', cursive;
 }
 
 .hero-image {
-    background: url("1cdd707.jpg"); background-position: center; background-repeat: no-repeat;);
-    height: 50%;
-    background-size: cover;
+    background: url("blogfit9DSC_0187_8_9_fused.jpg"); background-position: center; background-repeat: no-repeat; background-size: cover;);
+    height: 60%;
     position: relative;
 }
 
@@ -46,4 +49,33 @@ body, html{
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
+    width: auto;
 }
+
+input[type=text] {
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+    width: 100%;
+}
+
+#wrapper {
+    margin: auto;
+    margin-top: 5%;
+    width: 75%;
+    background-color: black;
+    min-width: 560px;
+    max-width: 1048px;
+    box-shadow: 3px 3px 3px #2E0000;
+}
+
+footer {
+    bottom: 0;
+    color: white;
+    background-color: #333;
+}
+

@@ -1,34 +1,36 @@
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'AskPete/style.css' %}" />
-<div>
-<nav>
-    <ul>
-        <li><a href="/admin">Admin Log In </a></li>
-    </ul>
-</nav>
-</div>
-
-<div class="hero-image">
-    <div class="hero-text">
-        <h1>Ask Pete</h1>
-        <form onsubmit="return GetAnswer()" method="get">
-            {% csrf_token %}
-            {{ form }}
-            <input placeholder="What do you want to know?" type="text" id="input">
-            <input type="submit" id="Submit" value="Submit">
-        </form>
-    </div>
-</div>
-
-<script>
-function GetAnswer() {
-    window.alert("its alive");
-    var question = document.getElementById("input").value;
-    for (var i in {{latest_question_list}}) {
-        if (question.equals({{i.question_text}}) ) {
-            window.alert({{i.answer_text}});
-        }
-    }
-    return false;
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'AskPete/style.css' %}" />
+    <link href="https://fonts.googleapis.com/css?family=Caveat+Brush" rel="stylesheet">
+    <script>
+        function GetAnswer(){
+    var x = document.getElementById("query").value;
+    window.alert("Hello World");
 }
-</script>
+    </script>
+    <title>Ask Pete: FIT QA System</title>
+</head>
+<body>
+    <div id="wrapper">
+        <nav>
+            <ul>
+                <li><a href="/admin">Admin Log In </a></li>
+            </ul>
+        </nav>
+
+
+        <div class="hero-image">
+            <div class="hero-text">
+                <h1>Ask Pete</h1>
+                <form onsubmit="return GetAnswer()" method="get">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input placeholder="I'm looking for..." type="text" id="input" name="query" required />
+                    <button type="submit" onclick="GetAnswer()">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <footer>&copy;Ask Pete</footer>
+    </div>
+</body>
