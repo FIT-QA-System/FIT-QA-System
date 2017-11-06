@@ -22,11 +22,11 @@
         <div class="hero-image">
             <div class="hero-text">
                 <h1>Ask Pete</h1>
-                <form onsubmit="return GetAnswer()" method="get">
+                <form action="{% url 'AskPete:getquery' input_text %}" method="post">
                     {% csrf_token %}
                     {{ form }}
                     <input placeholder="I'm looking for..." type="text" id="input" name="query" required />
-                    <button type="submit" onclick="GetAnswer()">Submit</button>
+                    <button type="submit">Submit</button>
                 </form>
             </div>
         </div>
