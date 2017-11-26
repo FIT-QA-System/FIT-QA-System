@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load easy_maps_tags %}
 
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'AskPete/style.css' %}" />
@@ -23,7 +22,6 @@
                     <p> Question: {{ question.question_text }}</p>
                     <p> Answer: {{ answer.answer_text }}</p>
                     {% if answer.isAddress is True %}
-                        {% easy_map "Melbourne, FL 32901 USA" 300 400 %}
                     {% endif %}
                 </div>
 
