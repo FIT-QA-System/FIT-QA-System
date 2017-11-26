@@ -1,0 +1,35 @@
+{% load staticfiles %}
+{% load easy_maps_tags %}
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'AskPete/style.css' %}" />
+    <link href="https://fonts.googleapis.com/css?family=Caveat+Brush" rel="stylesheet">
+    <title>Ask Pete: FIT QA System</title>
+</head>
+<body>
+    <div id="wrapper">
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a> </li>
+                <li><a href="/admin">Admin Log In </a></li>
+            </ul>
+        </nav>
+
+
+        <div class="hero-image">
+            <div class="hero-text">
+                <h1>Ask Pete</h1>
+                <div class="qa">
+                    <p> Question: {{ question.question_text }}</p>
+                    <p> Answer: {{ answer.answer_text }}</p>
+                    {% if answer.isAddress is True %}
+                        {% easy_map "Melbourne, FL 32901 USA" 300 400 %}
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <footer>&copy;Ask Pete</footer>
+    </div>
+</body>

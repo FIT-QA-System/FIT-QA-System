@@ -52,14 +52,10 @@ body{
     width: auto;
 }
 
-input[type=text] {
-    width: 130px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
-
-/* When the input field gets focus, change its width to 100% */
-input[type=text]:focus {
+.qa {
+    background-color: white;
+    border: dotted black ;
+    color: black;
     width: 100%;
 }
 
