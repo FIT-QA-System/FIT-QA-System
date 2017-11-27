@@ -39,9 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'AskPete.apps.AskpeteConfig',
+    'easy_maps'
 ]
 
-EASY_MAPS_GOOGLE_MAPS_API_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___0123456789'
+if django.VERSION < (1, 7):
+    INSTALLED_APPS += (
+        'south',
+    )
+
+EASY_MAPS_GOOGLE_MAPS_API_KEY = 'AIzaSyBqAVbxrWVB6S2Dp4FQixKSXLo6u_T6qnk'
 EASY_MAPS_CENTER = (-80, 28)
 
 MIDDLEWARE = [
