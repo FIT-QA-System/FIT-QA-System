@@ -29,20 +29,21 @@ li a:hover {
 }
 
 body{
-    height: auto;
+    height: 1000px;
     background-color: crimson;
     background: linear-gradient(crimson, black) no-repeat;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-family: 'Caveat Brush', cursive;
+
 }
 
-.hero-image {
+#hero-image {
     background: url("blogfit9DSC_0187_8_9_fused.jpg"); background-position: center; background-repeat: no-repeat; background-size: cover;);
-    height: 60%;
+    height: 350px;
     position: relative;
 }
 
-.hero-text {
+#hero-text {
     text-align: center;
     position: absolute;
     top: 50%;
@@ -52,18 +53,28 @@ body{
     width: auto;
 }
 
-input[type=text] {
-    width: 130px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
+#answer-text {
+    text-align: center;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    width: 90%;
+    height: 100%;
+    font-size: 30px;
 }
 
-/* When the input field gets focus, change its width to 100% */
-input[type=text]:focus {
+#qa {
+    background-color: white;
+    opacity: 0.9;
+    border: dotted black ;
+    color: black;
     width: 100%;
 }
 
 #wrapper {
+
     margin: auto;
     margin-top: 5%;
     width: 75%;
@@ -77,5 +88,35 @@ footer {
     bottom: 0;
     color: white;
     background-color: #333;
+
 }
 
+      #map {
+        height: 310px;
+          width: 100%;
+
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      #wrapper1 {
+          float: left;
+          width: 50%;
+      }
+      #wrapper2 {
+          float: right;
+          width: 50%;
+      }

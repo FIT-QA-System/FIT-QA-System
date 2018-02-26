@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import django
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'wxxxtewp-d&mv+pti5gm2$wiz^78miy_@-pf6ahqs5dvysshb0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -38,7 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'AskPete.apps.AskpeteConfig',
+    'easy_maps'
 ]
+
+if django.VERSION < (1, 7):
+    INSTALLED_APPS += (
+        'south',
+    )
+
+EASY_MAPS_GOOGLE_MAPS_API_KEY = 'AIzaSyBqAVbxrWVB6S2Dp4FQixKSXLo6u_T6qnk'
+EASY_MAPS_CENTER = (-80, 28)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -107,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 

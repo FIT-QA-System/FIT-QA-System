@@ -4,41 +4,34 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
 from .forms import SearchForm
-from .models import Question
+from .models import Question, Answer
 
 
 def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'AskPete/index.html', context)
+    return render(request, 'AskPete/index.html')
 
 
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'AskPete/results.html', {'question': question})
+def results(request):
+    return render(request, 'AskPete/results.html')
 
 
 
 
-def get_query(request, input_text):
+def get_query(request):
     # if this is a POST request we need to process the form data
     #return HttpResponse(request)
 
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        searchstring = SearchForm(request.POST)
+        form = SearchForm(request.POST)
         answer = Question.answer_text
         print(answer)
-        return HttpResponse("good")
         # check whether it's valid:
         if form.is_valid():
-            print(input_text)
-            if (input_text == Question.question_text):
-               print(Question.answer_text)
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
@@ -46,6 +39,11 @@ def get_query(request, input_text):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = SearchForm()
+        #form = SearchForm()
+        search_query = request.GET.get('query', None)
+        # Do whatever you need with the word the user looked for
+        question = Question.objects.get(question_text=search_query)
+        answer = Answer.objects.get(question=question)
+        return render(request, 'AskPete/results.html', {'question':question, 'answer':answer})
 
-    return render(request, 'AskPete\index.html', {'form': form})
+    return render(request, 'AskPete/index.html', {'form': form})
