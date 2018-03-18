@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -27,22 +28,22 @@ class Building(models.Model):
 
 class Department(models.Model):
     department_id = models.CharField('Department ID', max_length=20)
-    parent_department_id = models.CharField('Parent Department ID', max_length=20)
+    parent_department_id = models.CharField('Parent Department ID', max_length=20, null=True)
     name = models.CharField('Department Name', max_length=100)
     descriptions = models.CharField('Department Descriptions', max_length=300, null=True)
 
-    contact_phone_international_code = models.CharField('International Code', max_length=5)
-    contact_phone_area_code = models.CharField('Area Code', max_length=3)
-    contact_phone_number = models.CharField('Number', max_length=7)
-    contact_phone_extension = models.CharField('Extension', max_length=10)
+    contact_phone_international_code = models.CharField('International Code', max_length=5, null=True)
+    contact_phone_area_code = models.CharField('Area Code', max_length=3, null=True)
+    contact_phone_number = models.CharField('Number', max_length=7, null=True)
+    contact_phone_extension = models.CharField('Extension', max_length=10, null=True)
 
-    contact_email = models.EmailField('Email')
+    contact_email = models.EmailField('Email', null=True)
 
-    contact_facebook = models.URLField('Facebook')
+    contact_facebook = models.URLField('Facebook', null=True)
 
-    contact_website = models.URLField('Website')
+    contact_website = models.URLField('Website', null=True)
 
-    building = models.ForeignKey(Building, on_delete=models.CASCADE, null=True)
+    building = models.TextField("Building JSON", default="NA", null=True)
 
     update_date = models.DateTimeField('last update')
 
@@ -54,8 +55,8 @@ class Department(models.Model):
 
 
 class Employee(models.Model):
-    supervisor = models.CharField("Supervisor", max_length=100)
-    supervisee = models.CharField("Supervisee", max_length=100)
+    supervisor = models.CharField("Supervisor", max_length=100, null=True)
+    supervisee = models.CharField("Supervisee", max_length=100, null=True)
     # supervisee = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
     tracks =models.CharField("Tracks Account", max_length=20)
@@ -68,19 +69,21 @@ class Employee(models.Model):
 
     email = models.EmailField("Email")
 
-    phone_international_code = models.CharField('International Code', max_length=5)
-    phone_area_code = models.CharField('Area Code', max_length=3)
-    phone_number = models.CharField('Number', max_length=7)
-    phone_extension = models.CharField('Extension', max_length=10)
+    phone_international_code = models.CharField('International Code', max_length=5, null=True)
+    phone_area_code = models.CharField('Area Code', max_length=3, null=True)
+    phone_number = models.CharField('Number', max_length=7, null=True)
+    phone_extension = models.CharField('Extension', max_length=10, null=True)
 
-    title = models.CharField("Title", max_length=200)
+    title = models.CharField("Title", max_length=200, null=True)
 
-    position = models.CharField("Position (Primary and Additional) JSON", max_length=100)
+    position = models.TextField("Position (Primary and Additional) JSON")
 
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    department = models.TextField("Department JSON", default="NA")
+    department_id=models.CharField("Department ID", max_length=20, default="")
 
+    update_date = models.DateTimeField('last update')
     def __str__(self):
-        return self.prefix_name + " " + self.first_name + " " + self.last_name + " " + self.email
+        return self.first_name + " " + self.last_name + " " + self.email
 
     class Meta:
         ordering = ('tracks',)
@@ -107,7 +110,7 @@ class Course(models.Model):
 
     credit_hours = models.IntegerField("Credit Hours")
 
-    building = models.ForeignKey(Building, on_delete=models.SET_NULL, null=True)
+    building = models.TextField("Building", default="TBA")
 
     room = models.CharField("Room", max_length=100)
 
@@ -119,11 +122,25 @@ class Course(models.Model):
     max_enroll = models.IntegerField("Max Enroll")
     actual_enroll = models.IntegerField("Actual Enroll")
 
+    update_date = models.DateTimeField('last update')
+
     def __str__(self):
         return self.subject + " " + self.course_number + " " + self.title
 
     class Meta:
         ordering = ('subject', 'course_number')
+
+
+class QuestionAnswerPair(models.Model):
+    question = models.TextField("Question")
+    question_vector = models.TextField("Question Vector")
+    answer = models.TextField("Answer")
+
+    def __str__(self):
+        return self.question
+
+    class Meta:
+        ordering = ('question_vector', 'question')
 
 
 
