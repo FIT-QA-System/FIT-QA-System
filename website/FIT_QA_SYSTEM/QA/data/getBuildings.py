@@ -114,8 +114,14 @@ def department_employee():
                 area_code = None
                 number = None
                 extension = None
+                title = None
+                department = None
                 if e['position']:
                     if e['position']['primary']:
+                        if 'title' in e['position']['primary'].keys():
+                            title = e['position']['primary']['title']
+                        if 'department' in e['position']['primary'].keys():
+                            department = e['position']['primary']['department']
                         if 'phone' in e['position']['primary'].keys():
                             international_code = e['position']['primary']['phone']['display']['international_code']
                             area_code = e['position']['primary']['phone']['display']['area_code']
@@ -136,9 +142,9 @@ def department_employee():
                     phone_area_code=area_code,
                     phone_number=number,
                     phone_extension=extension,
-                    title=e['position']['primary']['title'],
+                    title=title,
                     position=e['position'],
-                    department=e['position']['primary']['department'],
+                    department=department,
                     department_id=department_id,
                     update_date=timezone.now()
 

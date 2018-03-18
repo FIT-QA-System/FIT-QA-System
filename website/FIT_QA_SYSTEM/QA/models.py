@@ -78,7 +78,7 @@ class Employee(models.Model):
 
     position = models.TextField("Position (Primary and Additional) JSON")
 
-    department = models.TextField("Department JSON", default="NA")
+    department = models.TextField("Department JSON", default="NA", null=True)
     department_id=models.CharField("Department ID", max_length=20, default="")
 
     update_date = models.DateTimeField('last update')
