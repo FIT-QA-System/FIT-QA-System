@@ -1,0 +1,40 @@
+{%  load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <title>Ask Pete</title>
+</head>
+<body>
+    <header>
+        <div class="container" onclick="prompt('How can we improve?', '');">
+            <div class="menu"></div>
+            <div class="menu"></div>
+            <div class="menu"></div>
+        </div>
+        <h1>Ask Pete</h1>
+    </header>
+    <div id="wrapper">
+        {% block intro %}
+            <div id="intro">
+                <div id="pete1">
+                    <img src="{% static 'pete-lounging.png' %}">
+                    <p>Hi, I'm Pete</p>
+                </div>
+                <div id="pete1">
+                    <img src="{% static 'pete-lounging.png' %}">
+                    <p>Ask me something about FIT</p>
+                </div>
+            </div>
+        {% endblock %}
+    {% block content %}{% endblock %}
+    </div>
+
+
+    <div id="search">
+        <form action="/" method="post">
+            {% csrf_token %}
+            <input id="question" name="question" type="text">
+            <input type="submit" value="New Question">
+        </form>
+    </div>
+</body>
