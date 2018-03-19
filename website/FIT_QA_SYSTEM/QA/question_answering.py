@@ -65,7 +65,7 @@ def answer_location(question):
     else:
         b = Building.objects.get(building_name=place)
 
-    return {"answer": b.street, "lat": b.latitude, "long":b.longitude}
+    return {"answer": b.street}
 
 
 
