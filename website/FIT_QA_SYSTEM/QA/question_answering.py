@@ -116,6 +116,8 @@ def answer_class(question):
                 result['answer'] = answer_course.begin_time + "-" + answer_course.end_time
             elif question.split(" ")[1].lower() == "days":
                 result['answer'] = answer_course.days
+        elif "enrollment" in question or "enroll" in question or "capacity" in question:
+            result['answer'] = "capacity: " + str(answer_course.max_enroll) + ", " + "actual enroll: " + str(answer_course.actual_enroll)
         else:
             result['answer'] = str(answer_course)
 
