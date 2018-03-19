@@ -15,19 +15,19 @@ def index(request):
             q = form.cleaned_data['question']
             result = answer(q)
             t = typeof(q)
-
+            a = result['answer']
             lat = None
             long = None
 
             if typeof(q) == 2:
-                # a = a.replace(" ","+").lower()
                 if result['answer'] == "Location not found":
                     t = 0
                 else:
                     lat = result['lat']
                     long = result['long']
+                    a = result['answer'].replace(" ", "+").lower()
 
-            return render(request, 'answer.html', {'question': q, 'answer': result['answer'], 'type': t, 'lat': lat, 'long': long})
+            return render(request, 'answer.html', {'question': q, 'answer': result['answer'], 'type': t, 'lat': lat, 'long': long, 'a':a})
 
     return render(request, 'index.html')
 
