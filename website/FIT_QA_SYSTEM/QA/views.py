@@ -4,7 +4,7 @@ from django.shortcuts import render
 import re
 from .models import *
 from .forms import QuestionForm
-from src.Translator import answer, typeof
+# from src.Translator import answer, typeof
 
 
 def index(request):
@@ -17,9 +17,15 @@ def index(request):
             if typeof(q) == 2:
                 a = a.replace(" ","+").lower()
 
-            return render(request, 'answer.html', {'question': q}, {'answer': a}, {'type': t})
+            return render(request, 'answer.html', {'question': q, 'answer': a, 'type': t})
 
     return render(request, 'index.html')
+
+def answer(question):
+    return "this is answer"
+
+def typeof(question):
+    return 2
 
 def question_detail(request, question):
     return render(request, 'answer.html', answer=answer_building_question(question=question))
