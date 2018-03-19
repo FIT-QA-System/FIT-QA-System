@@ -4,6 +4,7 @@ from django.shortcuts import render
 import re
 from .models import *
 from .forms import QuestionForm
+from .question_answering import *
 # from src.Translator import answer, typeof
 
 
@@ -12,20 +13,24 @@ def index(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             q = form.cleaned_data['question']
-            a = answer(q)
+            result = answer(q)
             t = typeof(q)
-            if typeof(q) == 2:
-                a = a.replace(" ","+").lower()
 
-            return render(request, 'answer.html', {'question': q, 'answer': a, 'type': t})
+            lat = None
+            long = None
+
+            if typeof(q) == 2:
+                # a = a.replace(" ","+").lower()
+                if result['answer'] == "Location not found":
+                    t = 0
+                else:
+                    lat = result['lat']
+                    long = result['long']
+
+            return render(request, 'answer.html', {'question': q, 'answer': result['answer'], 'type': t, 'lat': lat, 'long': long})
 
     return render(request, 'index.html')
 
-def answer(question):
-    return "this is answer"
-
-def typeof(question):
-    return 0
 
 def question_detail(request, question):
     return render(request, 'answer.html', answer=answer_building_question(question=question))

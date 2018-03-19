@@ -11,13 +11,14 @@
     <div id="pete">
         <img src="{% static 'pete-lounging.png' %}">
         <div id="extras">
+
             <p>{{ answer }}</p>
+
             {% ifequal type 1 %}
                 <iframe src="{{ answer }}"></iframe>
             {% endifequal %}
             {% ifequal type 2 %}
-                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU
-    &q={{ answer }}"></iframe>
+                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ lat }}, {{ long }}"></iframe>
             {% endifequal %}
         </div>
     </div>
