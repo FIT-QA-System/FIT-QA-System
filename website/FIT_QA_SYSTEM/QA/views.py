@@ -25,7 +25,7 @@ def answer(question):
     return "this is answer"
 
 def typeof(question):
-    return 2
+    return 0
 
 def question_detail(request, question):
     return render(request, 'answer.html', answer=answer_building_question(question=question))
