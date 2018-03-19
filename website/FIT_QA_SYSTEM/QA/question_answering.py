@@ -1,6 +1,7 @@
 from .models import *
 import re
 import spacy
+from django.core.exceptions import ObjectDoesNotExist
 
 def answer(question):
     cat = categorize_questions(question)
@@ -79,23 +80,40 @@ def answer_class(question):
 
     nlp = spacy.load("en_core_web_sm")
 
-    course = nlp(question).ents[0].text
-    print(course)
-
-    answer_course = Course.objects.get(title=course)
-
     result = {}
 
+    course_re = re.compile(r"^[\w ]+ (?P<course_subject>[\w]{3,3})(?P<course_code>[\d]{4,4})[\w ]*(\?)?$")
+
+    course_match = re.match(course_re, question)
+
+    if course_match:
+        c_subject = course_match.group("course_subject")
+        c_code = course_match.group("course_code")
+
+        answer_course = Course.objects.filter(subject=c_subject, course_number=c_code)
+
+    else:
+        entities = nlp(question).ents
+        if len(entities) == 0:
+            answer_course = None
+        else:
+            course = entities[0].text
+            answer_course = Course.objects.filter(title = course)
+
+
+
+
     if answer_course:
+        answer_course = answer_course[0]
         if first_word == "who":
             result['answer'] = answer_course.instructor
         elif first_word == "where":
             result['answer'] = answer_course.place
         elif first_word == "when":
-            result['answer'] = answer_course.days + " " + answer_course.time
+            result['answer'] = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
         elif first_word == "what":
             if question.split(" ")[1].lower() == "time":
-                result['answer'] = answer_course.time
+                result['answer'] = answer_course.begin_time + "-" + answer_course.end_time
             elif question.split(" ")[1].lower() == "days":
                 result['answer'] = answer_course.days
         else:
