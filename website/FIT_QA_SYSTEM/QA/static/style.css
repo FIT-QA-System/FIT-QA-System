@@ -32,12 +32,14 @@ h1 {
 }
 
 #wrapper {
-
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
 }
 
 #pete1 {
     float: left;
-    margin-top: 10px;
+    margin-top: 5px;
     width: 100%;
     padding: 5px;
 }
@@ -59,7 +61,7 @@ h1 {
 
 #pete {
     float: left;
-    margin-top: 10px;
+    margin-top: 5px;
     width: 100%;
     padding: 5px;
 }
@@ -71,17 +73,33 @@ h1 {
 }
 
 #pete p {
-    margin-left: 10px;
     float: left;
     height: 40px;
+    width: 100%;
     margin-top: 0px;
-    padding: 5px;
+    padding: 0px;
+}
+
+#pete #extras {
+    float: left;
+    margin-left: 10px;
     background-color: gainsboro;
+    padding: 5px;
+}
+
+iframe {
+    width: 100%;
+    margin-top: 0px;
+    height: 150px;
+    margin: auto;
+    border: none;
+    border-radius: 5px;
+    float: left;
 }
 
 #user {
     float: right;
-    margin-top: 10px;
+    margin-top: 5px;
     width: 100%;
     padding: 5px;
 }
@@ -109,6 +127,8 @@ h1 {
     height: 40px;
     border-top: solid 1px dimgray;
     padding: 5px;
+    margin-top: 5px;
+
 }
 
 #search input[type="text"] {

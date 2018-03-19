@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {%  load static %}
 
+{% block intro %}{% endblock %}
 
 {% block content %}
     <div id="user">
@@ -9,12 +10,15 @@
     </div>
     <div id="pete">
         <img src="{% static 'pete-lounging.png' %}">
-        <p>{{ answer }}</p>
-        {% ifequal type 1 %}
-            <iframe src="{{ answer }}"></iframe>
-        {% endifequal %}
-        {% ifequal type 2 %}
-            <div id="map" ></div>
-        {% endifequal %}
+        <div id="extras">
+            <p>{{ answer }}</p>
+            {% ifequal type 1 %}
+                <iframe src="{{ answer }}"></iframe>
+            {% endifequal %}
+            {% ifequal type 2 %}
+                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU
+    &q={{ answer }}"></iframe>
+            {% endifequal %}
+        </div>
     </div>
 {% endblock %}

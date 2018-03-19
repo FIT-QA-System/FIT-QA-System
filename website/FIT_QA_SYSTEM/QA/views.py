@@ -12,7 +12,12 @@ def index(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             q = form.cleaned_data['question']
-            return render(request, 'answer.html', {'question': q}, {'answer': answer(q)}, {'type': typeof(q)})
+            a = answer(q)
+            t = typeof(q)
+            if typeof(q) == 2:
+                a = a.replace(" ","+").lower()
+
+            return render(request, 'answer.html', {'question': q}, {'answer': a}, {'type': t})
 
     return render(request, 'index.html')
 

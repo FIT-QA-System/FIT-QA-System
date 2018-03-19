@@ -113,15 +113,15 @@ def sentence_similarity(sentence1, sentence2):
 
 
 
-def namedentity():
-    sent = tb.tagged_sents()[22]
-    print() 
+#def namedentity():
+    #sent = tb.tagged_sents()[22]
+    #print()
 
 
 # In[17]:
 
 
-namedentity()
+#namedentity()
 
 
 # In[31]:
