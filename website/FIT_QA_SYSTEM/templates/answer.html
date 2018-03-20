@@ -1,15 +1,17 @@
 {% extends "index.html" %}
 {%  load static %}
 
-{% block intro %}{% endblock %}
+
 
 {% block content %}
     <div id="user">
         <img src="{% static 'avatar.png' %}">
+        <div class="arrow-right"></div>
         <p id="question">{{ question }}</p>
     </div>
     <div id="pete">
         <img src="{% static 'pete-lounging.png' %}">
+        <div class="arrow-left"></div>
         <div id="extras">
 
             <p>{{ answer }}</p>
