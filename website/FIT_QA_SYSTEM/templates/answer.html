@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {%  load static %}
 
-
+{% block intro %} {% endblock %}
 
 {% block content %}
     <div id="user">
@@ -16,10 +16,10 @@
 
             <p>{{ answer }}</p>
 
-            {% ifequal type "Others" %}
+            {% ifequal type 1 %}
                 <iframe src="{{ answer }}"></iframe>
             {% endifequal %}
-            {% ifequal type "Location" %}
+            {% ifequal type 2 %}
                 <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ building_street }}"></iframe>
             {% endifequal %}
         </div>

@@ -5,7 +5,7 @@ import re
 from .models import *
 from .forms import QuestionForm
 from .question_answering import *
-# from src.Translator import answer, typeof
+from .Translator import answer as ans
 
 
 def index(request):
@@ -24,7 +24,7 @@ def index(request):
                 else:
                     b_street = result['answer'].replace(" ", "+").lower()
 
-            return render(request, 'answer.html', {'question': q, 'answer': result['answer'], 'type': t, 'building_street': b_street})
+            return render(request, 'answer.html', {'question': q, 'answer': ans(q), 'type': t, 'building_street': b_street})
 
     return render(request, 'index.html')
 
