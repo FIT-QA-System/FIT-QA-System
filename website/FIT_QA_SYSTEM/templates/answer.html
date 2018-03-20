@@ -16,10 +16,10 @@
 
             <p>{{ answer }}</p>
 
-            {% ifequal type 1 %}
+            {% ifequal type "Others" %}
                 <iframe src="{{ answer }}"></iframe>
             {% endifequal %}
-            {% ifequal type 2 %}
+            {% ifequal type "Location" %}
                 <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ building_street }}"></iframe>
             {% endifequal %}
         </div>

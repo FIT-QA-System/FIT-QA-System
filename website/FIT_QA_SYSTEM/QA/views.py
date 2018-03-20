@@ -4,8 +4,7 @@ from django.shortcuts import render
 import re
 from .models import *
 from .forms import QuestionForm
-from .question_answering import *
-# from src.Translator import answer, typeof
+from .Translator import answer, categorize_questions
 
 
 def index(request):
@@ -14,17 +13,15 @@ def index(request):
         if form.is_valid():
             q = form.cleaned_data['question']
             result = answer(q)
-            t = typeof(q)
+            type = categorize_questions(q)
             a = result['answer']
             b_street = None
 
-            if typeof(q) == 2:
-                if result['answer'] == "Location not found":
-                    t = 0
-                else:
-                    b_street = result['answer'].replace(" ", "+").lower()
+            if type == "Location":
+                b_street = result.replace(" ", "+").lower()
 
-            return render(request, 'answer.html', {'question': q, 'answer': result['answer'], 'type': t, 'building_street': b_street})
+
+            return render(request, 'answer.html', {'question': q, 'answer': result, 'type': type, 'building_street': b_street})
 
     return render(request, 'index.html')
 
