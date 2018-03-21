@@ -3,7 +3,6 @@ import pickle
 import re
 import spacy
 import json
-from .Milestone2.course_info.get_info import Course
 import django
 def hasevent(question):
     if "event" in question:
@@ -15,7 +14,7 @@ def hasdate(question):
     return False
 def has_class(question):
 
-    nlp = spacy.load("en_core_web_sm")
+    #nlp = spacy.load("en_core_web_sm")
 
 
     course_re1= re.compile(r"^[\w ]+ (?P<course_subject>[\w]{3,3})(?P<course_code>[\d]{4,4})[\w ]*(\?)?$")
@@ -35,6 +34,21 @@ def has_class(question):
         if answer_course:
             return True
     return False
+
+def typeof(question):
+    cat = categorize_questions(question)
+    t=1
+    if cat=="Location":
+        t=2
+    elif cat=="Instructor" or cat=="Class Time" or cat=="Classroom":
+        t=0
+    elif cat=="Office Hours" or cat=="Contact":
+        t=0
+    elif cat=="Building Hours":
+        t=0
+    elif cat=="Class":
+        t=0
+    return t
 
 
 def hasfaculty(question):
@@ -109,19 +123,19 @@ def categorize_questions(question):
     if "instructor" in question or "teacher" in question or "teaches" in question: #2.1 2.2 2.3 class info-instructor=who+class title
    #     for word in tags:
    #         if pos_tag(word)[1]==
-        if hasclass(question):
+        if has_class(question):
             return categories[1]
     ##class time
     if "what" in question or "What" in question:
         if "time" in question:
-            if hassclass(question):
+            if has_class(question):
                 return categories[2] ##3.1
     if "when" in question or "When" in question:
-        if hasclass(question):
+        if has_class(question):
             return categories[2] ##3.2 3.3
     ##classroom location
     if "Where" in question or "where" in question or "location" in question or "Which building" in question:
-        if hasclass(question):
+        if has_class(question):
             return categories[3] ##4.1 4.2 4.3
     ##faculty office location
     if "Where" in question or "where" in question or "location" in question:
@@ -249,7 +263,7 @@ def answer_staff(question,cat):
         if cat=="Contact":
             astaff='email: '+staff.email+'phone: '+staff.phone_international_code+staff.phone_area_code+staff.phone_number
         else:
-            astaff=s.title+' '+s.first_name+' '+s.last_name+' '+s.email+' '+s.department
+            astaff=staff.title+' '+staff.first_name+' '+staff.last_name+' '+staff.email+' '+staff.department
     return astaff
 def answer_buildinghours(question):
     return "hours"
