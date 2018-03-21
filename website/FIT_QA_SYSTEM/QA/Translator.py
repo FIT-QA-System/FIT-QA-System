@@ -191,7 +191,7 @@ def answer_location(question):
     else:
         b = Building.objects.get(building_name=place)
 
-    return {"answer": b.street+b.building_number}
+    return {"answer": b.street}
 def answer_class(question,subtype):
     first_word = question.split(" ")[0].lower()
 
@@ -222,7 +222,7 @@ def answer_class(question,subtype):
         if first_word == "who":
             result['answer'] = answer_course.instructor
         elif first_word == "where":
-            result['answer'] = answer_course.place
+            result['answer'] = answer_course.building + " " + answer_course.room
         elif first_word == "when":
             result['answer'] = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
         elif first_word == "what":

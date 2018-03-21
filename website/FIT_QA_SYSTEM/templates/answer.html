@@ -6,22 +6,36 @@
 {% block content %}
     <div id="user">
         <img src="{% static 'avatar.png' %}">
-        <div class="arrow-right"></div>
-        <p id="question">{{ question }}</p>
-    </div>
-    <div id="pete">
-        <img src="{% static 'pete-lounging.png' %}">
-        <div class="arrow-left"></div>
-        <div id="extras">
-
-            <p>{{ answer }}</p>
-
-            {% ifequal type 1 %}
-                <iframe src="{{ answer }}"></iframe>
-            {% endifequal %}
-            {% ifequal type 2 %}
-                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ building_street }}"></iframe>
-            {% endifequal %}
+        <div id="content2">
+            <div class="arrow-right"></div>
+            <p id="question">{{ question }}</p>
         </div>
     </div>
+    {% ifequal type 0 %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <p>{{ answer }}</p>
+            </div>
+        </div>
+    {% else %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <div id="extras">
+
+                    <p>{{ answer }}</p>
+
+                    {% ifequal type 1 %}
+                        <iframe src="{{ answer }}"></iframe>
+                    {% endifequal %}
+                    {% ifequal type 2 %}
+                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ building_street }}"></iframe>
+                    {% endifequal %}
+                </div>
+            </div>
+        </div>
+    {% endifequal %}
 {% endblock %}
