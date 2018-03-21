@@ -222,7 +222,7 @@ def answer_class(question,subtype):
         if first_word == "who":
             result['answer'] = answer_course.instructor
         elif first_word == "where":
-            result['answer'] = answer_course.building + " " + answer_course.room
+            result['answer'] = answer_course.building['street'] + " " + answer_course.room
         elif first_word == "when":
             result['answer'] = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
         elif first_word == "what":
