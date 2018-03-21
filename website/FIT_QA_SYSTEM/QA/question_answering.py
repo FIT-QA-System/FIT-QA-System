@@ -48,7 +48,7 @@ def categorize_questions(question):
 
 
 def answer_location(question):
-    where1 = re.compile(r"^[Ww]here is (?P<place>[ \w]+)(\?)?$")
+    where1 = re.compile(r"^[Ww]here is (?P<place>[ \w\.]+)(\?)?$")
     where2 = re.compile(r"^[Ww]hat is the location of (?P<place>[ \w]+)(\?)?$")
     where3 = re.compile(r"^[Ww]hat is the address of (?P<place>[ \w]+)(\?)?$")
 
@@ -68,11 +68,16 @@ def answer_location(question):
     building_code_pattern = re.compile(r"[\d]{3,3}[\w]{3,3}")
 
     if re.match(building_code_pattern, place):
-        b = Building.objects.get(building_code=place)
+        b = Building.objects.filter(building_code=place)
     else:
-        b = Building.objects.get(building_name=place)
+        b = Building.objects.filter(building_name=place)
 
-    return {"answer": b.street}
+    if b:
+        result = {"answer": b[0].street}
+    else:
+        result = {"answer": "Location not found"}
+
+    return result
 
 
 def answer_class(question):
@@ -94,13 +99,13 @@ def answer_class(question):
 
     else:
         entities = nlp(question).ents
+        print(entities)
         if len(entities) == 0:
             answer_course = None
         else:
             course = entities[0].text
-            answer_course = Course.objects.filter(title = course)
-
-
+            print(course)
+            answer_course = Course.objects.filter(title=course)
 
 
     if answer_course:
@@ -111,13 +116,14 @@ def answer_class(question):
             result['answer'] = answer_course.place
         elif first_word == "when":
             result['answer'] = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
+        elif "enrollment" in question or "enroll" in question or "capacity" in question:
+            result['answer'] = "capacity: " + str(answer_course.max_enroll) + ", " + "actual enroll: " + str(answer_course.actual_enroll)
         elif first_word == "what":
             if question.split(" ")[1].lower() == "time":
                 result['answer'] = answer_course.begin_time + "-" + answer_course.end_time
             elif question.split(" ")[1].lower() == "days":
                 result['answer'] = answer_course.days
-        elif "enrollment" in question or "enroll" in question or "capacity" in question:
-            result['answer'] = "capacity: " + str(answer_course.max_enroll) + ", " + "actual enroll: " + str(answer_course.actual_enroll)
+
         else:
             result['answer'] = str(answer_course)
 
