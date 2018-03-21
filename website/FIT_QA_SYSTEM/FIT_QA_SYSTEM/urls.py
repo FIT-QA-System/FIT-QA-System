@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.urls import include, path
 from django.contrib import admin
+from django.conf.urls import handler404, handler500
+from QA import views
 
 urlpatterns = [
     path('', include('QA.urls')),

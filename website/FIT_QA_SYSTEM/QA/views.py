@@ -4,8 +4,8 @@ from django.shortcuts import render
 import re
 from .models import *
 from .forms import QuestionForm
-from .question_answering import *
-# from src.Translator import answer, typeof
+#from .question_answering import *
+from .Translator import *
 
 
 def index(request):
@@ -14,17 +14,23 @@ def index(request):
         if form.is_valid():
             q = form.cleaned_data['question']
             result = answer(q)
+            a = None
             t = typeof(q)
-            a = result['answer']
             b_street = None
 
             if typeof(q) == 2:
                 if result['answer'] == "Location not found":
                     t = 0
                 else:
+                    a = result['answer']
                     b_street = result['answer'].replace(" ", "+").lower()
+            elif typeof(q) == 1:
+                a = "Can't answer the question"
+                t=0
+            else:
+                a = result['answer']
 
-            return render(request, 'answer.html', {'question': q, 'answer': result['answer'], 'type': t, 'building_street': b_street})
+            return render(request, 'answer.html', {'question': q, 'answer': a, 'type': t, 'building_street': b_street})
 
     return render(request, 'index.html')
 

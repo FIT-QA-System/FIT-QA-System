@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{%  load static %}
+
+{% block content %}
+    <div id="user">
+        <img src="{% static 'avatar.png' %}">
+        <p id="question">{{ question }}</p>
+    </div>
+    <div id="pete">
+        <img src="{% static 'pete-lounging.png' %}">
+        <p>Sorry I seem to have crashed</p>
+    </div>
+{% endblock %}
