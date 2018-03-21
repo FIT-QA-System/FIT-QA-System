@@ -284,11 +284,11 @@ def answer(question):
     if cat == "Location":
         answer = answer_location(question)
     elif cat=="Instructor" or cat=="Class Time" or cat=="Classroom":
-        answer = answer_class(question,cat);
+        answer = answer_class(question,cat)
     elif cat=="Office Location" or cat=="Office Hours" or cat=="Contact":
-        answer = answer_staff(question,cat);
+        answer = answer_staff(question,cat)
     elif cat=="Building Hours":
-        answer = answer_buildinghours(question);
+        answer = answer_buildinghours(question)
     else:
-        answer = answer_frompassage(question);
+        answer = answer_frompassage(question)
     return answer
