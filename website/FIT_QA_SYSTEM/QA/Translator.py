@@ -109,19 +109,19 @@ def categorize_questions(question):
     if "instructor" in question or "teacher" in question or "teaches" in question: #2.1 2.2 2.3 class info-instructor=who+class title
    #     for word in tags:
    #         if pos_tag(word)[1]==
-        if has_class(question):
+        if hasclass(question):
             return categories[1]
     ##class time
     if "what" in question or "What" in question:
         if "time" in question:
-            if has_class(question):
+            if hassclass(question):
                 return categories[2] ##3.1
     if "when" in question or "When" in question:
-        if has_class(question):
+        if hasclass(question):
             return categories[2] ##3.2 3.3
     ##classroom location
     if "Where" in question or "where" in question or "location" in question or "Which building" in question:
-        if has_class(question):
+        if hasclass(question):
             return categories[3] ##4.1 4.2 4.3
     ##faculty office location
     if "Where" in question or "where" in question or "location" in question:
