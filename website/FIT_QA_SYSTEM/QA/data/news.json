@@ -1,0 +1,88 @@
+{
+  'status': 'ok',
+  'source': 'cnn',
+  'sortBy': 'top',
+  'articles': [
+    {
+      'author': 'Seth Fiegerman',
+      'title': 'Mark Zuckerberg breaks his silence on Cambridge Analytica scandal',
+      'description': 'Mark Zuckerberg is finally breaking his silence about a data scandal engulfed Facebook.',
+      'url': 'http://money.cnn.com/2018/03/21/technology/mark-zuckerberg-cambridge-analytica-response/index.html',
+      'urlToImage': 'http://i2.cdn.turner.com/money/dam/assets/180320084944-zuckerberg-facebook-where-is-he-780x439.jpg',
+      'publishedAt': '2018-03-21T03:42:53Z'
+    },
+    {
+      'author': 'Seth Fiegerman',
+      'title': 'Mark Zuckerberg to face questions in CNN interview exclusive',
+      'description': "Five days after a data scandal first upended Facebook, CEO Mark Zuckerberg is set to give a rare interview with CNN's Laurie Segall.",
+      'url': 'http://money.cnn.com/2018/03/21/technology/mark-zuckerberg-cnn-interview/index.html',
+      'urlToImage': 'http://i2.cdn.turner.com/money/dam/assets/180320124706-mark-zuckerberg-780x439.jpg',
+      'publishedAt': '2018-03-21T03:40:09Z'
+    },
+    {
+      'author': 'Brian Ries and Veronica Rocha, CNN',
+      'title': 'Mark Zuckerberg responds to data scandal: Live updates',
+      'description': 'Mark Zuckerberg is responding to the fallout following the revelation that Cambridge Analytica improperly accessed the personal data of 50 million Facebook users.',
+      'url': 'http://us.cnn.com/2018/03/21/us/mark-zuckerberg-facebook-latest/index.html',
+      'urlToImage': 'https://cdn.cnn.com/cnnnext/dam/assets/170622131016-02-zuckerberg-interview-color-super-tease.jpg',
+      'publishedAt': '2018-03-21T19:52:08Z'
+    },
+    {
+      'author': "Donie O'Sullivan",
+      'title': 'Scientist at center of data controversy says Facebook is making him a scapegoat',
+      'description': 'Aleksandr Kogan, the data scientist whose work is at the center of the controversy currently engulfing Facebook and Cambridge Analytica, spoke out in exclusive interviews with CNN.',
+      'url': 'http://money.cnn.com/2018/03/20/technology/aleksandr-kogan-interview/index.html',
+      'urlToImage': 'http://i2.cdn.turner.com/money/dam/assets/180320212923-aleksandr-kogan-780x439.jpg',
+      'publishedAt': '2018-03-20T09:58:54Z'
+    },
+    {
+      'author': None,
+      'title': "Scientist: Didn't know data used to target voters - CNN Video",
+      'description': "The data scientist, Aleksandr Kogan, who gathered info on millions of Americans for Cambridge Analytica, the controversial data firm that worked for Trump's presidential campaign, says he didn't know what they would do with the Facebook user data he collected.",
+      'url': 'http://us.cnn.com/videos/cnnmoney/2018/03/20/cambridge-analytica-scientist-aleksandr-kogan-ac-sot.cnn',
+      'urlToImage': 'https://cdn.cnn.com/cnnnext/dam/assets/180320192306-aleksandr-kogan-ac-super-tease.jpg',
+      'publishedAt': None
+    },
+    {
+      'author': None,
+      'title': "Facebook's data scandal: Key names to know",
+      'description': 'Facebook is facing tough questions over how data on its users was obtained by a political data firm called Cambridge Analytica.',
+      'url': 'http://us.cnn.com/2018/03/20/politics/facebook-cambridge-analytica-key-players/index.html',
+      'urlToImage': 'https://cdn.cnn.com/cnnnext/dam/assets/180320132544-christopher-wylie-0312-restricted-super-tease.jpg',
+      'publishedAt': '2018-03-21T13:39:09Z'
+    },
+    {
+      'author': 'Danielle Wiener-Bronner',
+      'title': 'Your guide to Cambridge Analytica',
+      'description': "A quick guide to the controversial company everyone's been talking about.",
+      'url': 'http://money.cnn.com/2018/03/20/technology/what-is-cambridge-analytica/index.html',
+      'urlToImage': 'http://i2.cdn.turner.com/money/dam/assets/180320110304-cambridge-analytica-responds-to-channel-4-accusations-780x439.png',
+      'publishedAt': '2018-03-20T09:50:25Z'
+    },
+    {
+      'author': 'Douglas Rushkoff',
+      'title': "I ditched Facebook in 2013, and it's been fine",
+      'description': 'Leaving the social network behind lets you live life free of the constant psychological abuse inflicted by companies that mean to undermine your social relationships, and governments that mean to undermine your faith in democracy, government and human nature, Douglas Rushkoff says.',
+      'url': 'http://us.cnn.com/2018/03/21/opinions/ditching-facebook-rushkoff/index.html',
+      'urlToImage': 'https://cdn.cnn.com/cnnnext/dam/assets/180321140200-01-mark-zuckerberg-lead-image-super-tease.jpg',
+      'publishedAt': '2018-03-21T19:14:57Z'
+    },
+    {
+      'author': 'Jeff Zeleny, Senior White House Correspondent',
+      'title': 'Kelly furious over leak of warning to Trump to not congratulate Putin',
+      'description': 'White House chief of staff John Kelly is furious about the quick leak of a warning to President Donald Trump to not congratulate his Russian counterpart Vladimir Putin for his re-election, a White House official said.',
+      'url': 'http://us.cnn.com/2018/03/21/politics/donald-trump-vladimir-putin-congratulations/index.html',
+      'urlToImage': 'https://cdn.cnn.com/cnnnext/dam/assets/180304124552-john-kelly-super-tease.jpg',
+      'publishedAt': '2018-03-21T12:25:35Z'
+    },
+    {
+      'author': 'Analysis by Chris Cillizza, CNN Editor-at-large',
+      'title': "The real problem for Donald Trump in the 'DO NOT CONGRATULATE' story",
+      'description': "The fact that President Donald Trump either didn't read or ignored a warning in his briefing papers not to congratulate Russian President Vladimir Putin on a phone call between the two men Tuesday is a sexy story. But, it is not the real story here.",
+      'url': 'http://us.cnn.com/2018/03/21/politics/donald-trump-do-not-congratulate/index.html',
+      'urlToImage': 'https://cdn.cnn.com/cnnnext/dam/assets/171110103001-01-trump-putin-handshake-apec-1110-super-tease.jpg',
+      'publishedAt': '2018-03-21T13:43:58Z'
+    }
+  ]
+}
+
