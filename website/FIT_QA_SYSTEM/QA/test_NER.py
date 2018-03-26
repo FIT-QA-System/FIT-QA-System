@@ -58,7 +58,7 @@ def generate_training():
 
     for b in buildings:
         template = random.choice(location_template)
-        
+
 
 
 
