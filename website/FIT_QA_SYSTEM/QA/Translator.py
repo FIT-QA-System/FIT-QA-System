@@ -4,6 +4,7 @@ import re
 import spacy
 import json
 import django
+from .helpfunctions import *
 
 
 def hasevent(question):
@@ -232,7 +233,8 @@ def answer_class(question,subtype):
         if first_word == "who":
             result = answer_course.instructor
         elif first_word == "where":
-            result = answer_course.building + " " + answer_course.room
+            building = load_dirty_json(answer_course.building)
+            result = building['name'] + " " + answer_course.room
         elif first_word == "when":
             result = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
         elif first_word == "what":

@@ -4,6 +4,7 @@ import re
 import spacy
 import json
 from Milestone2.course_info.get_info import Course
+
 def hasclass(question):
     courses = pickle.load(open("Milestone2/course_info/courses.txt", "rb"))
     #nlp = spacy.load("en")
