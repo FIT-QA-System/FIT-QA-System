@@ -5,14 +5,19 @@ import spacy
 import json
 import django
 
+
 def hasevent(question):
     if "event" in question:
         return True
     return False
+
+
 def hasdate(question):
     if "date" in question:
         return True
     return False
+
+
 def has_class(question):
 
     #nlp = spacy.load("en_core_web_sm")
@@ -59,11 +64,11 @@ def hasfaculty(question):
         if word[0].isupper():
             if "Dr."in word:
                 name=word[3:]
-                if Employee.objects.get(first_name=name) or Employee.objects.get(last_name=name):
+                if Employee.objects.filter(first_name=name) or Employee.objects.filter(last_name=name):
                     return True
             else:
                 name = word
-                if Employee.objects.get(first_name=name) or Employee.objects.get(last_name=name):
+                if Employee.objects.filter(first_name=name) or Employee.objects.filter(last_name=name):
                     return True
     return False
 
@@ -167,6 +172,8 @@ def categorize_questions(question):
     #        maxsimilarity = similarity
     #        category = sample
     return categories[8]
+
+
 def answer_location(question):
     where1 = re.compile(r"^[Ww]here is (?P<place>[ \w]+)(\?)?$")
     where2 = re.compile(r"^[Ww]hat is the location of (?P<place>[ \w]+)(\?)?$")
@@ -183,7 +190,7 @@ def answer_location(question):
     elif m3:
         place = m3.group('place')
     else:
-        return {"answer": "Location not found"}
+        return "Location not found"
 
     building_code_pattern = re.compile(r"[\d]{3,3}[\w]{3,3}")
 
@@ -192,7 +199,9 @@ def answer_location(question):
     else:
         b = Building.objects.get(building_name=place)
 
-    return {"answer": b.street}
+    return b.street
+
+
 def answer_class(question,subtype):
     first_word = question.split(" ")[0].lower()
 
@@ -221,26 +230,28 @@ def answer_class(question,subtype):
     if answer_course:
         answer_course = answer_course[0]
         if first_word == "who":
-            result['answer'] = answer_course.instructor
+            result = answer_course.instructor
         elif first_word == "where":
-            result['answer'] = answer_course.building["street"] + " " + answer_course.room
+            result = answer_course.building + " " + answer_course.room
         elif first_word == "when":
-            result['answer'] = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
+            result = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
         elif first_word == "what":
             if question.split(" ")[1].lower() == "time":
-                result['answer'] = answer_course.begin_time + "-" + answer_course.end_time
+                result = answer_course.begin_time + "-" + answer_course.end_time
             elif question.split(" ")[1].lower() == "days":
-                result['answer'] = answer_course.days
+                result = answer_course.days
         elif "enrollment" in question or "enroll" in question or "capacity" in question:
-            result['answer'] = "capacity: " + str(answer_course.max_enroll) + ", " + "actual enroll: " + str(
+            result = "capacity: " + str(answer_course.max_enroll) + ", " + "actual enroll: " + str(
                 answer_course.actual_enroll)
         else:
-            result['answer'] = str(answer_course)
+            result = str(answer_course)
 
     else:
-        result['answer'] = "Class not found"
+        result = "Class not found"
 
     return result
+
+
 def answer_staff(question,cat):
     words = question.split(' ')
     del words[0]
@@ -249,34 +260,44 @@ def answer_staff(question,cat):
         if word[0].isupper():
             if "Dr." in word:
                 name = word[3:]
-                if Employee.objects.get(first_name=name):
-                    staff=Employee.objects.get(first_name=name)
-                elif Employee.objects.get(last_name=name):
-                    staff = Employee.objects.get(last_name=name)
+                if Employee.objects.filter(first_name=name):
+                    staff=Employee.objects.filter(first_name=name)[0]
+                elif Employee.objects.filter(last_name=name):
+                    staff = Employee.objects.filter(last_name=name)[0]
             else:
                 name = word
-                if Employee.objects.get(first_name=name):
-                    staff=Employee.objects.get(first_name=name)
-                elif Employee.objects.get(last_name=name):
-                    staff = Employee.objects.get(last_name=name)
+                if Employee.objects.filter(first_name=name):
+                    staff=Employee.objects.filter(first_name=name)[0]
+                elif Employee.objects.filter(last_name=name):
+                    staff = Employee.objects.filter(last_name=name)[0]
     astaff=None
     if staff:
         if cat=="Contact":
-            astaff='email: '+staff.email+'phone: '+staff.phone_international_code+staff.phone_area_code+staff.phone_number
+            astaff='email: '+staff.email+' phone: +'+staff.phone_international_code+' ('+staff.phone_area_code+') '+staff.phone_number
         else:
             astaff=staff.title+' '+staff.first_name+' '+staff.last_name+' '+staff.email+' '+staff.department
     return astaff
+
+
 def answer_buildinghours(question):
     return "hours"
+
+
 def answer_frompassage(question):
     from googleapiclient.discovery import build
     service = build("customsearch", 'v1',developerKey="AIzaSyDjsBfa0igZZQUL6gMdDKEMIGsX6j-2HVA")
     res = service.cse().list(q=question, cx="006188269277128775091:loi0aooxt4w").execute()
     return res['url']
+
+
 def exists(question):
     return False;
+
+
 def get_answer(question):
     return "old"
+
+
 def answer(question):
     if exists(question):
         answer=get_answer(question)
