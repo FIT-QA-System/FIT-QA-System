@@ -210,16 +210,19 @@ def answer_class(question,subtype):
 
     result = {}
 
-    course_re = re.compile(r"^[\w ]+ (?P<course_subject>[\w]{3,3})(?P<course_code>[\d]{4,4})[\w ]*(\?)?$")
+    course_re_code = re.compile(r"^[\w ]+ (?P<course_subject>[\w]{3,3})(?P<course_code>[\d]{4,4})[\w ]*(\?)?$")
+    course_re_title = re.compile(r"^[\w ]+ (?P<course_title>[\d])[\w ]*(\?)?$")
+    course_match_code = re.match(course_re_code, question)
+    course_match_title = re.match(course_re_title, question)
 
-    course_match = re.match(course_re, question)
-
-    if course_match:
-        c_subject = course_match.group("course_subject")
-        c_code = course_match.group("course_code")
+    if course_match_code:
+        c_subject = course_match_code.group("course_subject")
+        c_code = course_match_code.group("course_code")
 
         answer_course = Course.objects.filter(subject=c_subject, course_number=c_code)
-
+    else if course_match_title:
+        c_title=course_match_title.group("course_title")
+        answer_course = Course.objects.filter(title=c_title)
     else:
         entities = nlp(question).ents
         if len(entities) == 0:
