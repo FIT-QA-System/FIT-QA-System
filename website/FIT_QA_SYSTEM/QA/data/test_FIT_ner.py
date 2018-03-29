@@ -4,6 +4,7 @@ sentences = ["Who is the instructor of Artificial Intelligence?",
              "Where is the classroom of Compiler Theory and Design?",
              "Where is Frederick C. Crawford Bldg?",
              "Where is 420CRF?",
+             "Where is Panther Dining Hall?",
              "When is CSE5232?"]
 
 def test_ner(output_dir, test_text):
