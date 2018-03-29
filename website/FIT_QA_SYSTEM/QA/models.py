@@ -136,7 +136,7 @@ class Word_Standard(models.Model):
     standard_word = models.CharField("Standard Word", max_length=100)
 
     def __str__(self):
-        return self.original_word + " " + self.standard_word
+        return self.original_word + " -> " + self.standard_word
 
     class Meta:
         ordering = ('standard_word', 'original_word')

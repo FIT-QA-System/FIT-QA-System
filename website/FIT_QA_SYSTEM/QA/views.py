@@ -36,7 +36,8 @@ def index(request):
     return render(request, 'index.html')
 
 def test(request):
-    return HttpResponse(str(generate_training2()[-10:]))
+    get_all_entities()
+    return HttpResponse("Saved all entities.")
 
 
 def question_detail(request, question):
