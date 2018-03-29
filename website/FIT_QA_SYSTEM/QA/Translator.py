@@ -220,7 +220,7 @@ def answer_class(question,subtype):
         c_code = course_match_code.group("course_code")
 
         answer_course = Course.objects.filter(subject=c_subject, course_number=c_code)
-    else if course_match_title:
+    elif course_match_title:
         c_title=course_match_title.group("course_title")
         answer_course = Course.objects.filter(title=c_title)
     else:

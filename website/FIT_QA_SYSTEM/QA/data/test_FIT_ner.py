@@ -8,6 +8,7 @@ sentences = ["Who is the instructor of Artificial Intelligence?",
              "When is CSE5232?",
              "What is the capacity of 19839?"]
 
+
 def test_ner(output_dir, test_texts):
     print("Loading from", output_dir)
     nlp2 = spacy.load(output_dir)

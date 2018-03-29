@@ -131,6 +131,17 @@ class Course(models.Model):
         ordering = ('subject', 'course_number')
 
 
+class Word_Standard(models.Model):
+    original_word = models.CharField("Original Word", max_length=100)
+    standard_word = models.CharField("Standard Word", max_length=100)
+
+    def __str__(self):
+        return self.original_word + " " + self.standard_word
+
+    class Meta:
+        ordering = ('standard_word', 'original_word')
+
+
 class QuestionAnswerPair(models.Model):
     question = models.TextField("Question")
     question_vector = models.TextField("Question Vector")
