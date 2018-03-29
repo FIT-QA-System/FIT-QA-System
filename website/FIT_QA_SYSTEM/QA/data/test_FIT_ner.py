@@ -5,15 +5,16 @@ sentences = ["Who is the instructor of Artificial Intelligence?",
              "Where is Frederick C. Crawford Bldg?",
              "Where is 420CRF?",
              "Where is Panther Dining Hall?",
-             "When is CSE5232?"]
+             "When is CSE5232?",
+             "What is the capacity of 19839?"]
 
-def test_ner(output_dir, test_text):
+def test_ner(output_dir, test_texts):
     print("Loading from", output_dir)
     nlp2 = spacy.load(output_dir)
-    doc2 = nlp2(test_text)
-    for ent in doc2.ents:
-        print(ent.label_, ent.text)
+    for s in test_texts:
+        doc2 = nlp2(s)
+        for ent in doc2.ents:
+            print(ent.label_, ent.text)
 
 if __name__ == "__main__":
-    for s in sentences:
-        test_ner("FIT_model", s)
+    test_ner("FIT_model", sentences)
