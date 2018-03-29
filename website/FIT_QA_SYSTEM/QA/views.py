@@ -6,6 +6,8 @@ from .models import *
 from .forms import QuestionForm
 #from .question_answering import *
 from .Translator import *
+from .test_NER import *
+import pickle
 
 
 def index(request):
@@ -32,6 +34,9 @@ def index(request):
             return render(request, 'answer.html', {'question': q, 'answer': a, 'type': t, 'building_street': b_street})
 
     return render(request, 'index.html')
+
+def test(request):
+    return HttpResponse(str(generate_training2()[-10:]))
 
 
 def question_detail(request, question):

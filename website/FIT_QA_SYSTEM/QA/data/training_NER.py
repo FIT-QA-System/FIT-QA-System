@@ -26,10 +26,11 @@ import plac
 import random
 from pathlib import Path
 import spacy
+import pickle
 
 
 # new entity label
-LABEL = 'ANIMAL'
+LABEL = ['FIT_BUILDING', "FIT_COURSE"]
 
 #TODO department, person, class, building
 
@@ -39,31 +40,7 @@ LABEL = 'ANIMAL'
 # other entity types that spaCy correctly recognized before. Otherwise, your
 # model might learn the new type, but "forget" what it previously knew.
 # https://explosion.ai/blog/pseudo-rehearsal-catastrophic-forgetting
-TRAIN_DATA = [
-    ("Horses are too tall and they pretend to care about your feelings", {
-        'entities': [(0, 6, 'ANIMAL')]
-    }),
-
-    ("Do they bite?", {
-        'entities': []
-    }),
-
-    ("horses are too tall and they pretend to care about your feelings", {
-        'entities': [(0, 6, 'ANIMAL')]
-    }),
-
-    ("horses pretend to care about your feelings", {
-        'entities': [(0, 6, 'ANIMAL')]
-    }),
-
-    ("they pretend to care about your feelings, those horses", {
-        'entities': [(48, 54, 'ANIMAL')]
-    }),
-
-    ("horses?", {
-        'entities': [(0, 6, 'ANIMAL')]
-    })
-]
+TRAIN_DATA = pickle.load(open("./training_sentences.txt", "rb"))
 
 
 @plac.annotations(
@@ -71,7 +48,7 @@ TRAIN_DATA = [
     new_model_name=("New model name for model meta.", "option", "nm", str),
     output_dir=("Optional output directory", "option", "o", Path),
     n_iter=("Number of training iterations", "option", "n", int))
-def main(model=None, new_model_name='animal', output_dir=None, n_iter=20):
+def main(model=None, new_model_name='FIT', output_dir="./ner_new_model.txt", n_iter=20):
     """Set up the pipeline and entity recognizer, and train the new entity."""
     if model is not None:
         nlp = spacy.load(model)  # load existing spaCy model
@@ -89,7 +66,8 @@ def main(model=None, new_model_name='animal', output_dir=None, n_iter=20):
     else:
         ner = nlp.get_pipe('ner')
 
-    ner.add_label(LABEL)   # add new entity label to entity recognizer
+    for l in LABEL:
+        ner.add_label(l)   # add new entity label to entity recognizer
 
     # get names of other pipes to disable them during training
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != 'ner']
@@ -104,7 +82,7 @@ def main(model=None, new_model_name='animal', output_dir=None, n_iter=20):
             print(losses)
 
     # test the trained model
-    test_text = 'Do you like horses?'
+    test_text = 'Where is the classroom of Artificial Intelligence?'
     doc = nlp(test_text)
     print("Entities in '%s'" % test_text)
     for ent in doc.ents:
