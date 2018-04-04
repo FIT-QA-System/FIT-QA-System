@@ -5,6 +5,7 @@ import spacy
 import json
 import django
 from .helpfunctions import *
+from django.core.exceptions import *
 
 
 def hasevent(question):
@@ -100,13 +101,17 @@ def hasbuilding(question):
 
     building_code_pattern = re.compile(r"[\d]{3,3}[\w]{3,3}")
 
-    if re.match(building_code_pattern, place):
-        b = Building.objects.get(building_code=place)
-    else:
-        b = Building.objects.get(building_name=place)
+    try:
+        if re.match(building_code_pattern, place):
+            b = Building.objects.get(building_code=place)
+        else:
+            b = Building.objects.get(building_name=place)
 
-    if b:
-        return True
+        if b:
+            return True
+    except ObjectDoesNotExist:
+        pass
+
     return False
 
 
@@ -234,7 +239,7 @@ def answer_class(question,subtype):
     if answer_course:
         answer_course = answer_course[0]
         if first_word == "who":
-            result = answer_course.instructor
+            result = "Professor "+answer_course.instructor
         elif first_word == "where":
             building = load_dirty_json(answer_course.building)
             result = building['name'] + " " + answer_course.room
@@ -434,9 +439,6 @@ def answer(question):
     elif cat=="Building Hours":
         answer = answer_buildinghours(question)
     else:
-        an=answernews(question)
-        if not an=="not news":
-            answer=an
-        else:
-            answer = answer_frompassage(question)
+        answer = answer_frompassage(question)
+
     return answer

@@ -34,6 +34,11 @@ h1 {
     margin: auto;
 }
 
+header a {
+    text-decoration: none;
+    color: black;
+}
+
 #wrapper {
     height: 100%;
     width: 100%;
@@ -224,6 +229,7 @@ input {
   background-color: maroon !important;
   color: #ffffff;
 }
+
 
 @media only screen and (max-width: 64em) {
 

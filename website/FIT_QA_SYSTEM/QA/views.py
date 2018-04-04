@@ -8,9 +8,14 @@ from .forms import QuestionForm
 from .Translator import *
 from .test_NER import *
 import pickle
-
+import json
+from django.core.exceptions import *
 
 def index(request):
+    pq = []
+    for paqu in PastQuestion.objects.all():
+        pq.append(paqu.question)
+    pq=json.dumps(pq)
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
@@ -19,6 +24,7 @@ def index(request):
             a = result
             t = typeof(q)
             b_street = None
+            urlsearch = None
 
             if typeof(q) == 2:
                 if a == "Location not found":
@@ -26,14 +32,23 @@ def index(request):
                 else:
                     b_street = a.replace(" ", "+").lower()
             elif typeof(q) == 1:
-                a = "Can't answer the question"
-                t=0
+                urlsearch = "https://www.google.com/search?q=" + q.replace(" ", "+").lower()
+                a = "I can't answer that question "
             else:
                 a = result
 
-            return render(request, 'answer.html', {'question': q, 'answer': a, 'type': t, 'building_street': b_street})
+            try:
+                PastQuestion.objects.get(question=q)
+            except ObjectDoesNotExist:
+                if (typeof(q) != 1):
+                    qu = PastQuestion(question=q, answer=a, category=t)
+                    qu.save()
+                pass
 
-    return render(request, 'index.html')
+
+            return render(request, 'answer.html', {'question': q, 'answer': a, 'type': t, 'building_street': b_street, 'pastquestions':pq, 'url':urlsearch})
+
+    return render(request, 'index.html', {'pastquestions':pq})
 
 def test(request):
     get_all_entities()

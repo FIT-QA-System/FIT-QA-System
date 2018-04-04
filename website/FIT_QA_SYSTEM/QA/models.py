@@ -153,8 +153,10 @@ class QuestionAnswerPair(models.Model):
     class Meta:
         ordering = ('question_vector', 'question')
 
+class PastQuestion(models.Model):
+    question = models.TextField("Question")
+    category = models.IntegerField("Category")
+    answer = models.TextField("Answer")
 
-
-
-
-
+    def __str__(self):
+        return self.question

@@ -19,23 +19,28 @@
                 <p>{{ answer }}</p>
             </div>
         </div>
-    {% else %}
+    {% endifequal %}
+    {% ifequal type 1 %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <p><a href="{{ url }}">{{ url }}</a></p>
+            </div>
+        </div>
+    {% endifequal %}
+    {% ifequal type 2 %}
         <div id="pete">
             <img src="{% static 'pete-lounging.png' %}">
             <div id="content">
                 <div class="arrow-left"></div>
                 <div id="extras">
-
                     <p>{{ answer }}</p>
-
-                    {% ifequal type 1 %}
-                        <iframe src="{{ answer }}"></iframe>
-                    {% endifequal %}
-                    {% ifequal type 2 %}
-                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ building_street }}"></iframe>
-                    {% endifequal %}
+                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ building_street }}"></iframe>
                 </div>
             </div>
         </div>
     {% endifequal %}
+
 {% endblock %}
+
