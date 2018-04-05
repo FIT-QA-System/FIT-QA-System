@@ -403,17 +403,36 @@ def sentence_similarity(sentence1, sentence2):
     # Average the values
     score /= (count1 + count2)
     return score
+def match(words,line):
+    hit=0
+    qs=line.split()
+    n=len(words)
+    for word in words:
+        if word==None:
+            n=n-1
+            continue
+        if word in line:
+            hit=hit+1
+    return hit/n
+
 def answernews(question):
 #nlp = spacy.load("en")
 #who, when, where
-    if "who"or"Who"or"when" or"When"or"where"or"Where"in question:
+    if "who"or"Who"or"when" or"When"or"where"or"Where"in question: #named entity checking
+        words=question.split()
+        qs=pos_tag(word_tokenize(question))
+        for i in range(len(words)):
+            if penn_to_wn(qs[i][1]) != 'n':
+                words[i]=None
+            elif words[i][0].isupper:
+                words.append(words[i])
         for index, line in enumerate(open('data/news.txt', 'r').readlines()):
-            if question[8:-1] in line:
+            if match(words,line)>0.67:
                 return line
 
     else:
         for index, line in enumerate(open('data/news.txt', 'r').readlines()):
-            if sentence_similarity(line,question)>0.5:
+            if sentence_similarity(line,question)>0.66:
                 return line
     return "not news"
 
