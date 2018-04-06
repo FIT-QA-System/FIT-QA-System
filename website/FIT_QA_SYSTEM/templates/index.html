@@ -36,7 +36,7 @@
     {% block content %}{% endblock %}
     </div>
 
-
+    {% block searching %}
     <div id="search">
         <form action="/" method="post" autocomplete="off">
             {% csrf_token %}
@@ -46,6 +46,7 @@
             <input type="submit" value="New Question">
         </form>
     </div>
+
 
     <script>
         function autocomplete(inp, arr) {
@@ -155,5 +156,5 @@
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
         autocomplete(document.getElementById("question"), samplequestions);
     </script>
-
+    {% endblock %}
 </body>

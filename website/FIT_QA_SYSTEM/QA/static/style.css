@@ -2,8 +2,8 @@ body {
     width: 100%;
     height: 100%;
     display: block;
-    margin: 0px;
-    padding: 0px;
+    margin: 0em;
+    padding: 0em;
     overflow: hidden;
     font-family: sans-serif;
     overflow: hidden;
@@ -12,18 +12,20 @@ body {
 
 header {
     border-bottom: solid 1px dimgray;
-    height: 40px;
-    padding: 10px;
+    height: 6%;
+    padding: 2%;
     background-color: whitesmoke;
 }
 
 .container {
     float: left;
     margin: auto;
+    width: 35px;
+    height: 10%;
 }
 
 .menu {
-    width: 35px;
+    width: 100%;
     height: 5px;
     background-color: dimgray;
     margin: 6px 0;
@@ -32,6 +34,7 @@ header {
 h1 {
     text-align: center;
     margin: auto;
+    font-size: 200%;
 }
 
 header a {
@@ -40,8 +43,12 @@ header a {
 }
 
 #wrapper {
-    height: 100%;
+    height: 90%;
     width: 100%;
+}
+
+p {
+    font-size: 1em;
 }
 
 #pete {
@@ -57,6 +64,10 @@ header a {
     float: left;
 }
 
+p {
+    vertical-align: middle;
+    line-height: 40px;
+}
 #pete p {
     margin-left: 0px;
     float: left;
@@ -64,8 +75,6 @@ header a {
     margin-top: 0px;
     padding: 5px;
     background-color: gainsboro;
-    vertical-align: middle;
-    line-height: 40px;
     max-width: 80%;
     overflow-wrap: break-word;
 }
@@ -129,8 +138,6 @@ iframe {
     padding: 5px;
     background-color: maroon;
     color: white;
-    vertical-align: middle;
-    line-height: 40px;
     max-width: 80%;
     overflow-wrap: break-word;
 }
@@ -230,11 +237,110 @@ input {
   color: #ffffff;
 }
 
+@media only screen and (max-device-width: 600px) {
 
-@media only screen and (max-width: 64em) {
+    header {
+        height: 7%;
+        padding: 2%;
+    }
 
-}
+    h1 {
+        font-size: 5em;
+    }
 
-@media only screen and (max-width: 37.5em) {
+    .container {
+        width: 9%;
+        height: 80%;
+    }
 
+    .menu {
+        width: 100%;
+        height: 15%;
+        margin: 15px 0;
+    }
+
+    #pete {
+        margin-top: 3em;
+    }
+
+    #pete img {
+        height: 9em;
+        width: 9em;
+    }
+
+    #pete #extras {
+        width: 90%;
+        max-width: fit-content;
+    }
+
+    #user {
+        margin-top: 3em;
+    }
+
+    #user img {
+        height: 9em;
+        width: 9em;
+    }
+
+    p {
+        font-size: 3em;
+        min-height: 2.8em;
+        vertical-align: middle;
+        line-height: 2.7em;
+    }
+
+    #search {
+        bottom: 0;
+        width: 100%;
+        height: 6em;
+        padding: 10px;
+    }
+
+    .arrow-right {
+        border-top: 2em solid transparent;
+        border-bottom: 2em solid transparent;
+        border-left: 2em solid maroon;
+        margin-top: 2.5em;
+    }
+
+    .arrow-left {
+        border-top: 2em solid transparent;
+        border-bottom: 2em solid transparent;
+        border-right: 2em solid gainsboro;
+        margin-top: 2.5em;
+    }
+
+    #content {
+        float: left;
+        margin-left: 2%;
+        width: 80%;
+    }
+
+    #content2 {
+        float: right;
+        margin-right: 2%;
+        width: 80%;
+    }
+
+    iframe {
+        width: 100%;
+        margin-top: 0px;
+        height: 30em;
+        margin: auto;
+        border: none;
+        border-radius: 5px;
+        float: left;
+    }
+
+    #search input[type="text"] {
+        font-size: 3em;
+    }
+
+    #search input[type="submit"] {
+        font-size: 2em;
+    }
+
+    .autocomplete-items {
+        font-size: 3em;
+    }
 }
