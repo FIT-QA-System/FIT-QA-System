@@ -32,7 +32,7 @@ def index(request):
                 else:
                     b_street = a.replace(" ", "+").lower()
             elif typeof(q) == 1:
-                urlsearch = "https://www.google.com/search?q=" + q.replace(" ", "+").lower()
+                urlsearch = "https://www.google.com/search?q=site%3Afit.edu+" + q.replace(" ", "+").lower()
                 a = "I can't answer that question "
             else:
                 a = result
