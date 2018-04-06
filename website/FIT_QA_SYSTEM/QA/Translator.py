@@ -288,6 +288,29 @@ def answer_staff(question,cat):
             astaff=staff.title+' '+staff.first_name+' '+staff.last_name+' '+staff.email+' '+staff.department
     return astaff
 
+def answer_staff2(question, cat):
+    print("answer staff 2")
+    nlp = spacy.load("en_core_web_sm")
+    entities = nlp(question).ents
+
+    for e in entities:
+        if e.label_ == "PERSON":
+            if Employee.objects.filter(last_name=e.text):
+                employee = Employee.objects.filter(last_name=e.text)
+            elif Employee.objects.filter(first_name=e.text):
+                employee = Employee.objects.filter(first_name=e.text)
+            elif len(e.text.split(" ")):
+                if Employee.objects.filter(first_name=e.text.split(" ")[0], last_name=e.text.split(" ")[1]):
+                    employee = Employee.objects.filter(first_name=e.text.split(" ")[0], last_name=e.text.split(" ")[1])
+
+    if employee:
+        employee = employee[0]
+        astaff = 'email: ' + employee.email + ' phone: +' + employee.phone_international_code + ' (' + employee.phone_area_code + ') ' + employee.phone_number
+    else:
+        astaff = "Can't find the employee."
+    return astaff
+
+
 
 def answer_buildinghours(question):
     return "hours"
@@ -454,7 +477,7 @@ def answer(question):
     elif cat=="Instructor" or cat=="Class Time" or cat=="Classroom":
         answer = answer_class(question,cat)
     elif cat=="Office Location" or cat=="Office Hours" or cat=="Contact":
-        answer = answer_staff(question,cat)
+        answer = answer_staff2(question,cat)
     elif cat=="Building Hours":
         answer = answer_buildinghours(question)
     else:
