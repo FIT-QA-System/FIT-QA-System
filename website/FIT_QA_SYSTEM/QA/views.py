@@ -4,14 +4,15 @@ from django.shortcuts import render
 import re
 from .models import *
 from .forms import QuestionForm
-#from .question_answering import *
+from .question_answering import *
 from .Translator import *
 from .test_NER import *
 import pickle
 import json
 from django.core.exceptions import *
 
-def index(request):
+
+def index_2(request):
     pq = []
     for paqu in PastQuestion.objects.all():
         pq.append(paqu.question)
@@ -50,10 +51,27 @@ def index(request):
 
     return render(request, 'index.html', {'pastquestions':pq})
 
-def test(request):
-    get_all_entities()
-    return HttpResponse("Saved all entities.")
+def index(request):
+    pq = []
+    for paqu in PastQuestion.objects.all():
+        pq.append(paqu.question)
+    pq=json.dumps(pq)
 
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            q = form.cleaned_data['question']
+            result = answer_question(q)
+            result["question"] = q
+
+
+            return render(request, 'answer_modified.html', context=result)
+
+    return render(request, 'index.html', {'pastquestions':pq})
+
+def test(request):
+    generate_training3()
+    return HttpResponse("Generated")
 
 def question_detail(request, question):
     return render(request, 'answer.html', answer=answer_building_question(question=question))

@@ -2,137 +2,172 @@ from .models import *
 import re
 import spacy
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+from .helpfunctions import *
 
-def answer(question):
-    cat = categorize_questions(question)
+#types: Building, Employee, Class
+#answer type:
+# location (map)
+# person
+# class
+# message
+# google url
 
-    if cat == "Location":
-        result = answer_location(question)
-        return result
-    elif cat == "Class":
-        result = answer_class(question)
-        return result
+nlp = spacy.load("./QA/data/FIT_model_b_c_e")
+
+
+def translate(question_raw):
+    question_translated = question_raw
+    return question_translated
+
+
+def answer_question(question):
+    print("answer_question from question answering")
+
+    question = translate(question)
+    doc = nlp(question)
+    ents = doc.ents
+
+    labels = [ent.label_ for ent in ents]
+
+    answer = None
+
+
+    if len(ents) == 1:
+        if "FIT_BUILDING" in labels:
+            # asking about buildings
+            answer = answer_building(question, ents[0].text)
+        elif "FIT_COURSE" in labels:
+            # asking about course
+            answer = answer_course(question, ents[0].text)
+        elif "FIT_EMPLOYEE" in labels:
+            answer = answer_employee(question, ents[0].text)
     else:
-        return {"answer": "this is the answer"}
-
-def typeof(question):
-    cat = categorize_questions(question)
-    t=1
-    if cat=="Location":
-        t=2
-    elif cat=="Instructor" or cat=="Class Time" or cat=="Classroom":
-        t=0
-    elif cat=="Office Hours" or cat=="Contact":
-        t=0
-    elif cat=="Building Hours":
-        t=0
-    elif cat=="Class":
-        t=0
-    return t
+        answer = answer_url(question)
 
 
-def preprocess(question):
-    return question.lower()
 
 
-def categorize_questions(question):
-    preprocessed_question = preprocess(question)
-
-    categories = ["Location", "Instructor", "Class Time", "Classroom", "Office Location", "Office Hours",
-                  "Building Hours", "Contact", "Others", "Class"]
-
-    if "location" in preprocessed_question or "where" in preprocessed_question or "address" in preprocessed_question:
-        return "Location"
-    else:
-        return "Class"
+    return answer
 
 
-def answer_location(question):
-    where1 = re.compile(r"^[Ww]here is (?P<place>[ \w\.]+)(\?)?$")
-    where2 = re.compile(r"^[Ww]hat is the location of (?P<place>[ \w]+)(\?)?$")
-    where3 = re.compile(r"^[Ww]hat is the address of (?P<place>[ \w]+)(\?)?$")
+def answer_building(question, keyword):
+    answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
 
-    m1 = re.match(where1, question)
-    m2 = re.match(where2, question)
-    m3 = re.match(where3, question)
+    building = Building.objects.filter(Q(building_code__iexact=keyword) | Q(building_name__iexact=keyword) | Q(building_abbr__iexact=keyword))
+    if building:
+        answer["answer_type"] = "string"
 
-    if m1:
-        place = m1.group('place')
-    elif m2:
-        place = m2.group('place')
-    elif m3:
-        place = m3.group('place')
-    else:
-        return {"answer": "Location not found"}
-
-    building_code_pattern = re.compile(r"[\d]{3,3}[\w]{3,3}")
-
-    if re.match(building_code_pattern, place):
-        b = Building.objects.filter(building_code=place)
-    else:
-        b = Building.objects.filter(building_name=place)
-
-    if b:
-        result = {"answer": b[0].street}
-    else:
-        result = {"answer": "Location not found"}
-
-    return result
-
-
-def answer_class(question):
-    first_word = question.split(" ")[0].lower()
-
-    nlp = spacy.load("en_core_web_sm")
-
-    result = {}
-
-    course_re = re.compile(r"^[\w ]+ (?P<course_subject>[\w]{3,3})(?P<course_code>[\d]{4,4})[\w ]*(\?)?$")
-
-    course_match = re.match(course_re, question)
-
-    if course_match:
-        c_subject = course_match.group("course_subject")
-        c_code = course_match.group("course_code")
-
-        answer_course = Course.objects.filter(subject=c_subject, course_number=c_code)
-
-    else:
-        entities = nlp(question).ents
-        print(entities)
-        if len(entities) == 0:
-            answer_course = None
+        if "name" in question.lower():
+            for b in building:
+                answer["answer_messages"].append(b.building_name)
+        elif "code" in question.lower():
+            for b in building:
+                answer["answer_messages"].append(b.building_code)
+        elif "address" in question.lower() or "location" in question.lower() or "where" in question.lower():
+            answer["answer_type"] = "location"
+            answer["length_range"] = range(len(building))
+            for b in building:
+                answer["answer_messages"].append((b.street+"\n"+b.city+", "+b.state+"\n"+b.zip+"\n", b.street))
         else:
-            course = entities[0].text
-            print(course)
-            answer_course = Course.objects.filter(title=course)
-
-
-    if answer_course:
-        answer_course = answer_course[0]
-        if first_word == "who":
-            result['answer'] = answer_course.instructor
-        elif first_word == "where":
-            result['answer'] = answer_course.place
-        elif first_word == "when":
-            result['answer'] = answer_course.days + " " + answer_course.begin_time + "-" + answer_course.end_time
-        elif "enrollment" in question or "enroll" in question or "capacity" in question:
-            result['answer'] = "capacity: " + str(answer_course.max_enroll) + ", " + "actual enroll: " + str(answer_course.actual_enroll)
-        elif first_word == "what":
-            if question.split(" ")[1].lower() == "time":
-                result['answer'] = answer_course.begin_time + "-" + answer_course.end_time
-            elif question.split(" ")[1].lower() == "days":
-                result['answer'] = answer_course.days
-
-        else:
-            result['answer'] = str(answer_course)
+            answer["answer_type"] = "building"
+            answer["answer_obj"] = building
 
     else:
-        result['answer'] = "Class not found"
+        answer["answer_type"] = "string"
+        answer["answer_messages"].append("Sorry, it's not in our database. Please check your spelling.")
+    return answer
 
-    return result
+
+def answer_course(question, keyword):
+    answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
+
+    course = Course.objects.filter(Q(crn__iexact=keyword) | Q(title__iexact=keyword) | Q(subject__iexact=keyword[:3], course_number__iexact=keyword[-4:]))
+
+    if course:
+        answer["answer_type"] = "string"
+        if "instructor" in question.lower() or "teaches" in question.lower() or "teacher" in question.lower() or "who" in question.lower():
+            for c in course:
+                answer["answer_messages"].append("section " + c.section + "\n" + c.instructor)
+        elif "location" in question.lower() or "classroom" in question.lower() or "where" in question.lower():
+            answer["answer_type"] = "location"
+            answer["length_range"] = range(len(course))
+            for c in course:
+                building = load_dirty_json(c.building)
+                message = ("section " + c.section + "\n" + building["name"] + " " + c.room, building["street"])
+                answer["answer_messages"].append(message)
+
+        elif "time" in question.lower() or "when" in question.lower() or "days" in question.lower():
+            for c in course:
+                answer["answer_messages"].append("section " + c.section + "\n" + c.days + " " + c.begin_time + "-" + c.end_time)
+        elif "prerequisite" in question.lower():
+            for c in course:
+                answer["answer_messages"].append("section " + c.section + "\n" + c.prerequisites)
+        elif "capacity" in question.lower() or "enroll" in question.lower():
+            for c in course:
+                answer["answer_messages"].append("section " + c.section + "\n" + str(c.actual_enroll) + "/" + str(c.max_enroll))
+        elif "credit" in question.lower():
+            for c in course:
+                answer["answer_messages"].append("section " + c.section + "\n" + str(c.credit_hours))
+        else:
+            answer["answer_type"] = "course"
+            answer["answer_obj"] = course
+    else:
+        answer["answer_type"] = "string"
+        answer["answer_messages"].append("Sorry, it's not in our database. Please check your spelling.")
+
+    return answer
 
 
+def answer_employee(question, keyword):
+    answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
+
+    print("employee")
+
+    if "professor" in keyword.lower() or "prof" in keyword.lower() or "dr" in keyword.lower():
+        keyword_list = keyword.split(" ")[1:]
+        keyword = keyword_list.join(" ")
+
+    if len(keyword.split(" ")) == 2:
+        employee = Employee.objects.filter(Q(last_name__iexact=keyword) | Q(first_name__iexact=keyword) | Q(first_name__iexact=keyword.split(" ")[0], last_name__iexact=keyword.split(" ")[1]))
+    else:
+        employee = Employee.objects.filter(Q(last_name__iexact=keyword) | Q(first_name__iexact=keyword))
+
+    if employee:
+        answer["answer_type"] = "string"
+        if "contact" in question.lower():
+            for e in employee:
+                answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + 'email: ' + e.email + ' phone: +' + e.phone_international_code + ' (' + e.phone_area_code + ') ' + e.phone_number)
+        elif "email" in question.lower():
+            for e in employee:
+                answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + e.email)
+        elif "phone" in question.lower() or "number" in question.lower():
+            for e in employee:
+                answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + e.phone_international_code + ' (' + e.phone_area_code + ') ' + e.phone_number)
+        else:
+            answer["answer_type"] = "employee"
+            answer["answer_obj"] = employee
+    else:
+        answer["answer_type"] = "string"
+        answer["answer_messages"].append("Sorry, it's not in our database. Please check your spelling.")
+    return answer
+
+
+def answer_frompassage(question):
+    answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
+    from googleapiclient.discovery import build
+    service = build("customsearch", 'v1',developerKey="AIzaSyDjsBfa0igZZQUL6gMdDKEMIGsX6j-2HVA")
+    res = service.cse().list(q=question, cx="006188269277128775091:loi0aooxt4w").execute()
+    answer["answer_type"] = "url"
+    answer["answer_messages"].append(res["url"])
+    return answer
+
+def answer_url(question):
+    answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
+    urlsearch = "https://www.google.com/search?q=site%3Afit.edu+" + question.replace(" ", "+").lower()
+    answer["answer_type"] = "url"
+    answer["answer_messages"].append(urlsearch)
+    return answer
 
 
 

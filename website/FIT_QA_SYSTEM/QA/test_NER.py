@@ -42,6 +42,14 @@ course_template.append("Show me all sections of $course.")
 
 #"What classes does x teach?"
 
+employee_template = []
+employee_template.append("What is the contact information of Prof. $employee?")
+employee_template.append("What is Dr. $employee's email address?")
+employee_template.append("What is the phone number of $employee?")
+employee_template.append("Where is the office of $employee?")
+employee_template.append("How can I contact $employee?")
+
+
 
 def get_entity(sentence, ne, label_name):
 
@@ -66,8 +74,10 @@ def generate_example(obj, templates, substitute_str, label_name):
         sentence = template.substitute(building=obj)
     elif(substitute_str == "$course"):
         sentence = template.substitute(course=obj)
+    elif (substitute_str == "$employee"):
+        sentence = template.substitute(employee=obj)
 
-    return get_entity2(sentence, obj, label_name)
+    return get_entity(sentence, obj, label_name)
 
 def generate_training():
     training_set = []
@@ -117,6 +127,34 @@ def generate_training2():
 
     return training_set
 
+def generate_training3():
+    training_set = []
+
+    buildings = Building.objects.all()
+    courses = Course.objects.all()
+    employees = Employee.objects.all()
+
+    for b in buildings:
+        training_set.append(generate_example(b.building_name, location_template, "$building", "FIT_BUILDING"))
+        training_set.append(generate_example(b.building_code, location_template, "$building", "FIT_BUILDING"))
+    for c in courses:
+        training_set.append(generate_example(c.crn, course_template, "$course", "FIT_COURSE"))
+        training_set.append(generate_example(c.title, course_template, "$course", "FIT_COURSE"))
+        training_set.append(generate_example(c.subject + c.course_number, course_template, "$course", "FIT_COURSE"))
+    for e in employees:
+        training_set.append(generate_example(e.first_name + " " + e.last_name, employee_template, "$employee", "FIT_EMPLOYEE"))
+        training_set.append(generate_example(e.last_name, employee_template, "$employee", "FIT_EMPLOYEE"))
+
+
+    with open("./QA/data/news_sentences.txt", "r") as f:
+        sentences = f.readlines()
+        for s in sentences:
+            ents = [(e.start_char, e.end_char, e.label_) for e in nlp(s).ents]
+            training_set.append((s, {'entities': ents}))
+
+    pickle.dump(training_set, open("./QA/data/training_sentences_c_b_e.txt", "wb"))
+
+    return training_set
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 # LABEL = ['FIT_BUILDING', "FIT_COURSE"]
-TRAIN_DATA = pickle.load(open("./training_sentences.txt", "rb"))
+TRAIN_DATA = pickle.load(open("./training_sentences_c_b_e.txt", "rb"))
 nlp = spacy.load('en_core_web_sm', entity=False, parser=False)
 print(len(TRAIN_DATA))
 
@@ -54,7 +54,7 @@ print(len(TRAIN_DATA))
     new_model_name=("New model name for model meta.", "option", "nm", str),
     output_dir=("Optional output directory", "option", "o", Path),
     n_iter=("Number of training iterations", "option", "n", int))
-def main(model='en_core_web_sm', new_model_name='FIT', output_dir="FIT_model", n_iter=1):
+def main(model='en_core_web_sm', new_model_name='FIT', output_dir="FIT_model_b_c_e", n_iter=2):
     """Set up the pipeline and entity recognizer, and train the new entity."""
     if model is not None:
         nlp = spacy.load(model)  # load existing spaCy model
@@ -76,6 +76,7 @@ def main(model='en_core_web_sm', new_model_name='FIT', output_dir="FIT_model", n
     # ner.add_label("ANIMAL")
     ner.add_label("FIT_COURSE")
     ner.add_label("FIT_BUILDING")
+    ner.add_label("FIT_EMPLOYEE")
 
     # get names of other pipes to disable them during training
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != 'ner']
@@ -84,11 +85,14 @@ def main(model='en_core_web_sm', new_model_name='FIT', output_dir="FIT_model", n
         for itn in range(n_iter):
             random.shuffle(TRAIN_DATA)
             losses = {}
+            count = 0
             for text, annotations in TRAIN_DATA:
-                print(text)
                 nlp.update([text], [annotations], sgd=optimizer, drop=0.35,
                            losses=losses)
-            print(losses)
+                count = count+1
+                if count%100 == 0:
+                    print(count)
+            # print(losses)
 
     # test the trained model
     test_text = 'Where is the classroom of Artificial Intelligence?'

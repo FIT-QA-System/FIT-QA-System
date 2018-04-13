@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+{%  load static %}
+
+{% block intro %} {% endblock %}
+
+{% block content %}
+    <div id="user">
+        <img src="{% static 'avatar.png' %}">
+        <div id="content2">
+            <div class="arrow-right"></div>
+            <p id="question">{{ question }}</p>
+        </div>
+    </div>
+
+    {% ifequal answer_type "string" %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <p>
+                    {% for m in answer_messages %}
+                    {{ m|linebreaksbr }}<br>
+                    {% endfor %}
+                </p>
+
+            </div>
+        </div>
+
+    {% endifequal %}
+
+    {% ifequal answer_type "location" %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <div id="extras">
+                    {% for m in answer_messages %}
+                        <p>{{ m.0 }}</p>
+                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ m.1 }}"></iframe>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+    {% endifequal %}
+
+    {% ifequal answer_type "employee" %}
+
+    {% endifequal %}
+
+    {% ifequal answer_type "building" %}
+
+    {% endifequal %}
+
+    {% ifequal answer_type "course" %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <p><a href="{{ url }}">{{ url }}</a></p>
+            </div>
+        </div>
+
+    {% endifequal %}
+
+    {% ifequal answer_type "url" %}
+        <div id="pete">
+            <img src="{% static 'pete-lounging.png' %}">
+            <div id="content">
+                <div class="arrow-left"></div>
+                <p><a href="{{ url }}">{{ url }}</a></p>
+            </div>
+        </div>
+    {% endifequal %}
+
+{% endblock %}

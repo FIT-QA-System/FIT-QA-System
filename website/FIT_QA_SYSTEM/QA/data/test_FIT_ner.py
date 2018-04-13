@@ -5,7 +5,7 @@ sentences = ["Who is the instructor of Artificial Intelligence?",
              "Where is Frederick C. Crawford Bldg?",
              "Where is 420CRF?",
              "Where is Panther Dining Hall?",
-             "When is CSE5232?",
+             "When is CSE 5232?",
              "What is the capacity of 19839?"]
 
 
