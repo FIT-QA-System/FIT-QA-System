@@ -4,6 +4,7 @@ import spacy
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from .helpfunctions import *
+import json
 
 #types: Building, Employee, Class
 #answer type:
@@ -144,6 +145,20 @@ def answer_employee(question, keyword):
         elif "phone" in question.lower() or "number" in question.lower():
             for e in employee:
                 answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + e.phone_international_code + ' (' + e.phone_area_code + ') ' + e.phone_number)
+        elif "where" in question.lower() or "office" in question.lower() or "find" in question.lower():
+            answer["answer_type"] = "location"
+            answer["length_range"] = range(len(employee))
+
+            for e in employee:
+                position = load_dirty_json(e.position.replace("None", "'None'"))
+
+                primary = position["primary"]
+                building = primary["building"]
+                room = building["room"]
+                message = (e.first_name + " " + e.last_name + "\n" + building["name"] + " " + room["number"], building["street"])
+                answer["answer_messages"].append(message)
+
+
         else:
             answer["answer_type"] = "employee"
             answer["answer_obj"] = employee
