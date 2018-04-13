@@ -35,7 +35,7 @@
                 <div class="arrow-left"></div>
                 <div id="extras">
                     {% for m in answer_messages %}
-                        <p>{{ m.0 }}</p>
+                        <p>{{ m.0|linebreaksbr }}</p>
                         <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBl6fFRKBn-iZiouEpvaJfZlr8255dhMOU&q={{ m.1 }}"></iframe>
                     {% endfor %}
 
@@ -58,7 +58,10 @@
             <img src="{% static 'pete-lounging.png' %}">
             <div id="content">
                 <div class="arrow-left"></div>
-                <p><a href="{{ url }}">{{ url }}</a></p>
+                <p>
+
+
+                </p>
             </div>
         </div>
 
@@ -69,7 +72,11 @@
             <img src="{% static 'pete-lounging.png' %}">
             <div id="content">
                 <div class="arrow-left"></div>
-                <p><a href="{{ url }}">{{ url }}</a></p>
+                <p>
+                    {% for m in answer_messages %}
+                         <a href="{{ m }}">{{ m }}</a>
+                    {% endfor %}
+                </p>
             </div>
         </div>
     {% endifequal %}

@@ -23,7 +23,6 @@ def translate(question_raw):
 
 
 def answer_question(question):
-    print("answer_question from question answering")
 
     question = translate(question)
     doc = nlp(question)
@@ -45,9 +44,6 @@ def answer_question(question):
             answer = answer_employee(question, ents[0].text)
     else:
         answer = answer_url(question)
-
-
-
 
     return answer
 
@@ -123,7 +119,6 @@ def answer_course(question, keyword):
 def answer_employee(question, keyword):
     answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
 
-    print("employee")
 
     if "professor" in keyword.lower() or "prof" in keyword.lower() or "dr" in keyword.lower():
         keyword_list = keyword.split(" ")[1:]

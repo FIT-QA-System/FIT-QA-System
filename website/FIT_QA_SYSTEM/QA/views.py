@@ -62,8 +62,9 @@ def index(request):
         if form.is_valid():
             q = form.cleaned_data['question']
             result = answer_question(q)
+            print(result)
             result["question"] = q
-
+            print(result)
 
             return render(request, 'answer_modified.html', context=result)
 
