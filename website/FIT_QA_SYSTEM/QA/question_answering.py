@@ -23,9 +23,10 @@ nlp = spacy.load("./QA/data/FIT_model_b_c_e")
 
 def translate(question_raw):
     #case sensitive: capitalize every word
-    words = question_raw.split()
-    words_c = [w.capitalize() for w in words]
-    question_translated = " ".join(words_c)
+    # words = question_raw.split()
+    # words_c = [w.capitalize() for w in words]
+    # question_translated = " ".join(words_c)
+    question_translated = question_raw
 
     return question_translated
 
@@ -38,10 +39,6 @@ def answer_question(question):
 
     labels = [ent.label_ for ent in ents]
 
-    answer = small_talk(question)
-
-    if answer["answer_messages"][0]:
-        return answer
 
     if len(ents) == 1:
         if "FIT_BUILDING" in labels:
@@ -52,6 +49,8 @@ def answer_question(question):
             answer = answer_course(question, ents[0].text)
         elif "FIT_EMPLOYEE" in labels:
             answer = answer_employee(question, ents[0].text)
+    elif small_talk(question)["answer_messages"][0]:
+        answer = small_talk(question)
     else:
         answer = answer_url(question)
 
@@ -135,7 +134,6 @@ def answer_course(question, keyword):
                 answer["answer_messages"].append(course_str)
 
 
-            # answer["answer_obj"] = course
     else:
         answer["answer_type"] = "string"
         answer["answer_messages"].append("Sorry, it's not in our database. Please check your spelling.")
@@ -160,7 +158,7 @@ def answer_employee(question, keyword):
         answer["answer_type"] = "string"
         if "contact" in question.lower():
             for e in employee:
-                answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + 'email: ' + e.email + ' phone: +' + e.phone_international_code + ' (' + e.phone_area_code + ') ' + e.phone_number)
+                answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + 'email: ' + e.email + '\n phone: +' + e.phone_international_code + ' (' + e.phone_area_code + ') ' + e.phone_number)
         elif "email" in question.lower():
             for e in employee:
                 answer["answer_messages"].append(e.first_name + " " + e.last_name + "\n" + e.email)
@@ -182,8 +180,20 @@ def answer_employee(question, keyword):
 
 
         else:
-            answer["answer_type"] = "employee"
-            answer["answer_obj"] = employee
+            answer["answer_type"] = "string"
+            employee_template = Template("Name: $prefix $first_name $last_name \n"
+                                       "Email: $email \n"
+                                       "Phone: $phone \n"
+                                       "Office: $office")
+            for e in employee:
+                position = load_dirty_json(e.position.replace("None", "'None'"))
+                primary = position["primary"]
+                building = primary["building"]
+                room = building["room"]
+                employee_str = employee_template.substitute(prefix=e.prefix_name, first_name=e.first_name, last_name=e.last_name,
+                                                            email=e.email, phone=e.phone_international_code + ' (' + e.phone_area_code + ') ' + e.phone_number,
+                                                            office=building["name"] + " " + room["number"])
+                answer["answer_messages"].append(employee_str)
     else:
         answer["answer_type"] = "string"
         answer["answer_messages"].append("Sorry, it's not in our database. Please check your spelling.")
