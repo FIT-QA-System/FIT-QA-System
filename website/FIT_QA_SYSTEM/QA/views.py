@@ -71,8 +71,8 @@ def index(request):
     return render(request, 'index.html', {'pastquestions':pq})
 
 def test(request):
-    generate_training3()
-    return HttpResponse("Generated")
+    json_str = small_talk("How are you?")
+    return HttpResponse(json_str["answer_messages"])
 
 def question_detail(request, question):
     return render(request, 'answer.html', answer=answer_building_question(question=question))

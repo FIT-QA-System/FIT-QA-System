@@ -5,6 +5,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from .helpfunctions import *
 import json
+from .apiai_code import *
+
+import apiai
 
 #types: Building, Employee, Class
 #answer type:
@@ -30,7 +33,12 @@ def answer_question(question):
 
     labels = [ent.label_ for ent in ents]
 
-    answer = None
+    answer = small_talk(question)
+
+    if answer["answer_messages"][0]:
+        return answer
+
+
 
 
     if len(ents) == 1:
@@ -179,6 +187,27 @@ def answer_url(question):
     answer["answer_messages"].append(urlsearch)
     return answer
 
+
+def small_talk(question):
+    answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
+
+    # Initialize API.AI client
+
+    client = apiai.ApiAI(APIAI_CLIENT_ACCESS_TOKEN)
+
+    # Create new request
+
+    request = client.text_request()
+    request.query = question
+
+    # Receive response and convert it to JSON
+
+    response = request.getresponse()
+
+    answer["answer_type"] = "string"
+    answer["answer_messages"].append(json.loads(response.read().decode())["result"]["fulfillment"]["speech"])
+
+    return answer
 
 
 
