@@ -39,19 +39,25 @@ def answer_question(question):
 
     labels = [ent.label_ for ent in ents]
 
+    print(ents)
 
     if len(ents) == 1:
         if "FIT_BUILDING" in labels:
             # asking about buildings
+            print("building")
             answer = answer_building(question, ents[0].text)
         elif "FIT_COURSE" in labels:
             # asking about course
+            print("course")
             answer = answer_course(question, ents[0].text)
         elif "FIT_EMPLOYEE" in labels:
+            print("employee")
             answer = answer_employee(question, ents[0].text)
     elif small_talk(question)["answer_messages"][0]:
+        print("small_talk")
         answer = small_talk(question)
     else:
+        print("url")
         answer = answer_url(question)
 
     return answer
@@ -76,8 +82,14 @@ def answer_building(question, keyword):
             for b in building:
                 answer["answer_messages"].append((b.street+"\n"+b.city+", "+b.state+"\n"+b.zip+"\n", b.street))
         else:
-            answer["answer_type"] = "building"
-            answer["answer_obj"] = building
+            answer["answer_type"] = "location"
+            building_template = Template("Name: $name\n"
+                                         "Code: $code\n"
+                                         "Address: $address\n")
+            for b in building:
+                building_str = building_template.substitute(name=b.building_name, code=b.building_code, address=b.street+"\n"+b.city+", "+b.state+"\n"+b.zip+"\n")
+                answer["answer_messages"].append((building_str, b.street))
+
 
     else:
         answer["answer_type"] = "string"
@@ -88,14 +100,14 @@ def answer_building(question, keyword):
 def answer_course(question, keyword):
     answer = {"answer_type": None, "answer_messages": [], "answer_locations": [], "answer_obj": None}
 
-    course = Course.objects.filter(Q(crn__iexact=keyword) | Q(title__iexact=keyword) | Q(subject__iexact=keyword[:3], course_number__iexact=keyword[-4:]))
+    course = Course.objects.filter(Q(crn__iexact=keyword) | Q(title__iexact=keyword) | Q(subject__iexact=keyword[:3], course_number__iexact=keyword[-4:]) | Q(subject__iexact=keyword))
 
     if course:
         answer["answer_type"] = "string"
         if "instructor" in question.lower() or "teaches" in question.lower() or "teacher" in question.lower() or "who" in question.lower():
             for c in course:
                 answer["answer_messages"].append("section " + c.section + "\n" + c.instructor)
-        elif "location" in question.lower() or "classroom" in question.lower() or "where" in question.lower():
+        elif "location" in question.lower() or "classroom" in question.lower() or "class room" in question.lower() or "where" in question.lower():
             answer["answer_type"] = "location"
             answer["length_range"] = range(len(course))
             for c in course:
@@ -125,10 +137,14 @@ def answer_course(question, keyword):
                                        "Time: $time\n"
                                        "Actual Enrollment: $actual, Max Enrollment: $max")
             for c in course:
-                building = load_dirty_json(c.building)
+                location_str = "TBA"
+                if c.building != "TBA":
+                    building = load_dirty_json(c.building.replace("None", "'None'"))
+                    location_str = building["name"] + " " + c.room
+
                 course_str = course_template.substitute(crn=c.crn, code=c.subject+c.course_number, section=c.section,
                                            title=c.title, description=c.description, instructor=c.instructor,
-                                           credit_hour=str(c.credit_hours), location=building["name"] + " " + c.room,
+                                           credit_hour=str(c.credit_hours), location=location_str,
                                            time=c.days + " " + c.begin_time + "-" + c.end_time,
                                            actual=c.actual_enroll, max=c.max_enroll)
                 answer["answer_messages"].append(course_str)

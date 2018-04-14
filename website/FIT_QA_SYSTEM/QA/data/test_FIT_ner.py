@@ -6,7 +6,8 @@ sentences = ["Who is the instructor of Artificial Intelligence?",
              "Where is 420CRF?",
              "Where is Panther Dining Hall?",
              "When is CSE 5232?",
-             "What is the capacity of 19839?"]
+             "What is the capacity of 19839?",
+             "Where is panther dining hall?"]
 
 
 def test_ner(output_dir, test_texts):
@@ -18,4 +19,4 @@ def test_ner(output_dir, test_texts):
             print(ent.label_, ent.text)
 
 if __name__ == "__main__":
-    test_ner("FIT_model", sentences)
+    test_ner("FIT_model_b_c_e", sentences)
