@@ -204,6 +204,7 @@ def small_talk(question):
 
     response = request.getresponse()
 
+
     answer["answer_type"] = "string"
     answer["answer_messages"].append(json.loads(response.read().decode())["result"]["fulfillment"]["speech"])
 
