@@ -441,7 +441,7 @@ def match(words,line):
 def answernews(question):
 #nlp = spacy.load("en")
 #who, when, where
-    if "who"or"Who"or"when" or"When"or"where"or"Where"in question: #named entity checking
+    if "who" in question or "Who" in question: #named entity checking
         words=question.split()
         qs=pos_tag(word_tokenize(question))
         for i in range(len(words)):
@@ -450,14 +450,50 @@ def answernews(question):
             elif words[i][0].isupper:
                 words.append(words[i])
         for index, line in enumerate(open('data/news.txt', 'r').readlines()):
-            if match(words,line)>0.67:
+            if match(words,line)>0.75:
+                #print(match(words,line))
+                #print(ne_chunk(pos_tag(word_tokenize(line))))
+                for subtree in ne_chunk(pos_tag(word_tokenize(line))).subtrees():
+                    if subtree.label()=="PERSON":
+                        return subtree.leaves()[0][0]+' '+subtree.leaves()[1][0]
                 return line
-
+    if "when" in question or"When" in question:
+        words=question.split()
+        qs=pos_tag(word_tokenize(question))
+        for i in range(len(words)):
+            if penn_to_wn(qs[i][1]) != 'n':
+                words[i]=None
+            elif words[i][0].isupper:
+                words.append(words[i])
+        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+            if match(words,line)>0.70:
+                #print(match(words,line))
+                #print(ne_chunk(pos_tag(word_tokenize(line))))
+                for subtree in ne_chunk(pos_tag(word_tokenize(line))).subtrees():
+                    if subtree.label()=="CD":
+                        return subtree.leaves()
+                return line
+    if "where"in question or"Where" in question:
+        words=question.split()
+        qs=pos_tag(word_tokenize(question))
+        for i in range(len(words)):
+            if penn_to_wn(qs[i][1]) != 'n':
+                words[i]=None
+            elif words[i][0].isupper:
+                words.append(words[i])
+        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+            if match(words,line)>0.70:
+                #print(match(words,line))
+                #print(ne_chunk(pos_tag(word_tokenize(line))))
+                for subtree in ne_chunk(pos_tag(word_tokenize(line))).subtrees():
+                    if subtree.label()=="GPE":
+                        return subtree.leaves()
+                return line
     else:
         for index, line in enumerate(open('data/news.txt', 'r').readlines()):
-            if sentence_similarity(line,question)>0.66:
+            if sentence_similarity(line,question)>0.70:
                 return line
-    return "not news"
+    return None
 
 def exists(question):
     return False;
@@ -481,6 +517,8 @@ def answer(question):
     elif cat=="Building Hours":
         answer = answer_buildinghours(question)
     else:
-        answer = answer_frompassage(question)
+        answer = answernews(question)
+        if answer==None:
+            answer = answer_frompassage(question)
 
     return answer
