@@ -6,6 +6,7 @@ from django.db.models import Q
 from .helpfunctions import *
 import json
 from .apiai_code import *
+from string import Template
 
 import apiai
 
@@ -21,7 +22,11 @@ nlp = spacy.load("./QA/data/FIT_model_b_c_e")
 
 
 def translate(question_raw):
-    question_translated = question_raw
+    #case sensitive: capitalize every word
+    words = question_raw.split()
+    words_c = [w.capitalize() for w in words]
+    question_translated = " ".join(words_c)
+
     return question_translated
 
 
@@ -37,9 +42,6 @@ def answer_question(question):
 
     if answer["answer_messages"][0]:
         return answer
-
-
-
 
     if len(ents) == 1:
         if "FIT_BUILDING" in labels:
@@ -115,8 +117,25 @@ def answer_course(question, keyword):
             for c in course:
                 answer["answer_messages"].append("section " + c.section + "\n" + str(c.credit_hours))
         else:
-            answer["answer_type"] = "course"
-            answer["answer_obj"] = course
+            answer["answer_type"] = "string"
+            course_template = Template("CRN: $crn \nCode: $code \nSection: $section \n"
+                                       "Title: $title \n Description: $description \n"
+                                       "Instructor: $instructor \n"
+                                       "Credit Hour: $credit_hour\n"
+                                       "Location: $location\n"
+                                       "Time: $time\n"
+                                       "Actual Enrollment: $actual, Max Enrollment: $max")
+            for c in course:
+                building = load_dirty_json(c.building)
+                course_str = course_template.substitute(crn=c.crn, code=c.subject+c.course_number, section=c.section,
+                                           title=c.title, description=c.description, instructor=c.instructor,
+                                           credit_hour=str(c.credit_hours), location=building["name"] + " " + c.room,
+                                           time=c.days + " " + c.begin_time + "-" + c.end_time,
+                                           actual=c.actual_enroll, max=c.max_enroll)
+                answer["answer_messages"].append(course_str)
+
+
+            # answer["answer_obj"] = course
     else:
         answer["answer_type"] = "string"
         answer["answer_messages"].append("Sorry, it's not in our database. Please check your spelling.")
