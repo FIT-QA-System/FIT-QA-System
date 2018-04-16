@@ -28,6 +28,14 @@ with open("./QA/data/FIT_dictionary.txt", "r") as f:
     fit_ner = [w.replace("\n","") for w in words]
 
 def translate(question_raw):
+    standard_pairs = Word_Standard.objects.all()
+
+    for s in standard_pairs:
+        if s.original_word.lower() in question_raw.lower() and s.standard_word.lower() not in question_raw.lower():
+            question_raw = question_raw.replace(s.original_word, s.standard_word)
+            question_raw = question_raw.replace(s.original_word.lower(), s.standard_word)
+            break
+
     doc_raw = nlp(question_raw)
     #case sensitive: capitalize every word
     question_capitalized = question_raw.title()
