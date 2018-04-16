@@ -126,7 +126,7 @@ def answernews(question):
                 words[i]=None
             elif words[i][0].isupper:
                 words.append(words[i])
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open('./QA/data/news.txt', 'r').readlines()):
             if match(words,line)>0.75:
                 #print(match(words,line))
                 #print(ne_chunk(pos_tag(word_tokenize(line))))
@@ -142,7 +142,7 @@ def answernews(question):
                 words[i]=None
             elif words[i][0].isupper:
                 words.append(words[i])
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open('./QA/data/news.txt', 'r').readlines()):
             if match(words,line)>0.70:
                 #print(match(words,line))
                 #print(ne_chunk(pos_tag(word_tokenize(line))))
@@ -158,7 +158,7 @@ def answernews(question):
                 words[i]=None
             elif words[i][0].isupper:
                 words.append(words[i])
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open('./QA/data/news.txt', 'r').readlines()):
             if match(words,line)>0.70:
                 #print(match(words,line))
                 #print(ne_chunk(pos_tag(word_tokenize(line))))
@@ -167,7 +167,7 @@ def answernews(question):
                         return subtree.leaves()
                 return line
     else:
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open('./QA/data/news.txt', 'r').readlines()):
             if sentence_similarity(line,question)>0.70:
                 return line
 def filt(x):

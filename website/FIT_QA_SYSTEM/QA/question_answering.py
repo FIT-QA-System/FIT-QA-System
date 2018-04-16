@@ -7,6 +7,7 @@ from .helpfunctions import *
 import json
 from .apiai_code import *
 from string import Template
+from .answernews import *
 
 import apiai
 

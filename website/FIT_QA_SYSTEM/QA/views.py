@@ -61,6 +61,7 @@ def index(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             q = form.cleaned_data['question']
+
             result = answer_question(q)
             result["question"] = q
 
