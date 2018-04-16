@@ -21,13 +21,30 @@ import apiai
 
 nlp = spacy.load("./QA/data/FIT_model_b_c_e")
 
+fit_ner = None
+with open("./QA/data/FIT_dictionary.txt", "r") as f:
+    lines = f.readlines()
+    words = set(lines)
+    fit_ner = [w.replace("\n","") for w in words]
 
 def translate(question_raw):
+    doc_raw = nlp(question_raw)
     #case sensitive: capitalize every word
-    # words = question_raw.split()
-    # words_c = [w.capitalize() for w in words]
-    # question_translated = " ".join(words_c)
+    question_capitalized = question_raw.title()
+
+    doc_capitalized = nlp(question_capitalized)
+
+    if doc_capitalized.ents == doc_raw.ents:
+        return question_raw
+
+    ents = doc_capitalized.ents
+
     question_translated = question_raw
+
+    for ent in ents:
+        if ent.text in fit_ner:
+            raw_text = "".join([t.lower() for t in ent.text])
+            question_translated = question_raw.replace(raw_text, ent.text)
 
     return question_translated
 
