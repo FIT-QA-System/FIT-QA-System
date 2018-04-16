@@ -181,8 +181,3 @@ def answernews(question):
                 return line
 def filt(x):
     return x.label()=='Person'
-print(answernews("who is the president of Florida Tech"))
-print(answernews("who is the city attorney for the city of Melbourne"))
-print(answernews("who is the Athletic Director"))
-print(answernews("when is Hope X"))
-print(answernews("where does Smith live"))
