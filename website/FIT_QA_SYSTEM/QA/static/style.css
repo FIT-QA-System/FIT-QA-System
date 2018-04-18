@@ -12,8 +12,8 @@ body {
 
 header {
     border-bottom: solid 1px dimgray;
-    height: 6%;
-    padding: 2%;
+    height: 4%;
+    padding: 1%;
     background-color: whitesmoke;
 }
 
@@ -43,8 +43,10 @@ header a {
 }
 
 #wrapper {
-    height: 90%;
+    height: 88%;
     width: 100%;
+    overflow-y:scroll;
+    overflow-x:hidden;
 }
 
 p {
