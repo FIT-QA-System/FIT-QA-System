@@ -67,29 +67,30 @@ def answer_question(question):
 
     print(ents)
 
-    answer_news_result = answernews(question)
-
-    if answer_news_result != None:
-        print("answer news)")
-        answer = {"answer_type": "string", "answer_messages": [], "answer_locations": [], "answer_obj": None}
-        answer["answer_messages"].append(answer_news_result)
-    elif "FIT_BUILDING" in labels or "FIT_COURSE" in labels or "FIT_EMPLOYEE" in labels:
-        if "FIT_BUILDING" in labels:
-            # asking about buildings
-            print("building")
-            answer = answer_building(question, ents[0].text)
-        elif "FIT_COURSE" in labels:
-            # asking about course
-            print("course")
-            answer = answer_course(question, ents[0].text)
-        elif "FIT_EMPLOYEE" in labels:
-            print("employee")
-            answer = answer_employee(question, ents[0].text)
+    small_talk_result = small_talk(question)
+    print(small_talk_result)
+    if small_talk_result["answer_messages"][0]:
+        print("small talk")
+        answer = small_talk_result
+        return answer
     else:
-        small_talk_result = small_talk(question)
-        if small_talk_result["answer_messages"][0]:
-            print("small talk")
-            answer = small_talk_result
+        answer_news_result = answernews(question)
+        if answer_news_result != None:
+            print("answer news")
+            answer = {"answer_type": "string", "answer_messages": [], "answer_locations": [], "answer_obj": None}
+            answer["answer_messages"].append(answer_news_result)
+        elif "FIT_BUILDING" in labels or "FIT_COURSE" in labels or "FIT_EMPLOYEE" in labels:
+            if "FIT_BUILDING" in labels:
+                # asking about buildings
+                print("building")
+                answer = answer_building(question, ents[0].text)
+            elif "FIT_COURSE" in labels:
+                # asking about course
+                print("course")
+                answer = answer_course(question, ents[0].text)
+            elif "FIT_EMPLOYEE" in labels:
+                print("employee")
+                answer = answer_employee(question, ents[0].text)
         else:
             print("url")
             answer = answer_url(question)
