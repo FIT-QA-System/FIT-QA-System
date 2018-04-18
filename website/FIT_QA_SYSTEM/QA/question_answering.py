@@ -67,7 +67,13 @@ def answer_question(question):
 
     print(ents)
 
-    if len(ents) == 1:
+    answer_news_result = answernews(question)
+
+    if answer_news_result != None:
+        print("answer news)")
+        answer = {"answer_type": "string", "answer_messages": [], "answer_locations": [], "answer_obj": None}
+        answer["answer_messages"].append(answer_news_result)
+    elif "FIT_BUILDING" in labels or "FIT_COURSE" in labels or "FIT_EMPLOYEE" in labels:
         if "FIT_BUILDING" in labels:
             # asking about buildings
             print("building")
@@ -79,12 +85,14 @@ def answer_question(question):
         elif "FIT_EMPLOYEE" in labels:
             print("employee")
             answer = answer_employee(question, ents[0].text)
-    elif small_talk(question)["answer_messages"][0]:
-        print("small_talk")
-        answer = small_talk(question)
     else:
-        print("url")
-        answer = answer_url(question)
+        small_talk_result = small_talk(question)
+        if small_talk_result["answer_messages"][0]:
+            print("small talk")
+            answer = small_talk_result
+        else:
+            print("url")
+            answer = answer_url(question)
 
     return answer
 

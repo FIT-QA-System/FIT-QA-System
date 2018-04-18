@@ -4,6 +4,10 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import WordNetError
 from nltk import word_tokenize, pos_tag   ##implementation of similarity() from http://nlpforhackers.io/wordnet-sentence-similarity/
 from nltk import word_tokenize, pos_tag, ne_chunk
+
+# news_path = 'data/news.txt'
+news_path = './QA/data/news.txt'
+
 def penn_to_wn(tag):
     """ Convert between a Penn Treebank tag to a simplified Wordnet tag """
     if tag.startswith('N'):
@@ -126,7 +130,7 @@ def answernews(question):
                 words[i]=None
             elif words[i][0].isupper:
                 words.append(words[i])
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open(news_path, 'r').readlines()):
             if match(words,line)>0.75:
                 #print(match(words,line))
                 #print(ne_chunk(pos_tag(word_tokenize(line))))
@@ -145,7 +149,7 @@ def answernews(question):
                 words[i]=None
             elif words[i][0].isupper:
                 words.append(words[i])
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open(news_path, 'r').readlines()):
             if match(words,line)>0.70:
                 #print(match(words,line))
                 #print(ne_chunk(pos_tag(word_tokenize(line))))
@@ -164,7 +168,7 @@ def answernews(question):
                 words[i]=None
             elif words[i][0].isupper:
                 words.append(words[i])
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open(news_path, 'r').readlines()):
             if match(words,line)>0.70:
                 #print(match(words,line))
                 #print(ne_chunk(pos_tag(word_tokenize(line))))
@@ -176,12 +180,13 @@ def answernews(question):
                         return place
                 return line
     else:
-        for index, line in enumerate(open('data/news.txt', 'r').readlines()):
+        for index, line in enumerate(open(news_path, 'r').readlines()):
             if sentence_similarity(line,question)>0.70:
                 return line
 def filt(x):
     return x.label()=='Person'
 if __name__=="__main__":
+    news_path = 'data/news.txt'
     print(answernews("who is the president of Florida Tech"))
     print(answernews("who is the city attorney for the city of Melbourne"))
     print(answernews("who is the Athletic Director"))
